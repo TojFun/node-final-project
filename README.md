@@ -1,6 +1,6 @@
 # node-final-project
 
-My final node.js project
+My final node.js project.
 
 ### Requirements:
 
