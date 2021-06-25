@@ -10,4 +10,4 @@ require("./configs/dataBase");
 
 app.use("/test", testRoute);
 
-app.listen(3000);
+app.listen(8000);

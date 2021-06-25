@@ -1,4 +1,4 @@
-const Person = require("../models/persons");
+const Person = require("../models/movies");
 
 async function get(id = null) {
   if (id === null) return await Person.find().exec();
