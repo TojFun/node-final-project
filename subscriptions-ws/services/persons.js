@@ -7,12 +7,7 @@ async function get(id = null) {
 }
 
 async function post(obj) {
-  try {
-    const person = await Person.create(obj);
-    return { person, status: "Created", error: null };
-  } catch (error) {
-    return { status: "Error", error };
-  }
+  return await Person.create(obj);
 }
 
 async function put(id, object) {
