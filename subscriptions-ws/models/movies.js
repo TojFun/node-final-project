@@ -7,4 +7,4 @@ const MovieSchema = new mongoose.Schema({
   premiered: Date,
 });
 
-module.exports = mongoose.model("movies", MovieSchema);
+module.exports = mongoose.model("movies", MovieSchema, "movies");

@@ -5,4 +5,8 @@ const SubscriptionSchema = new mongoose.Schema({
   movies: Array,
 });
 
-module.exports = mongoose.model("subscriptions", SubscriptionSchema);
+module.exports = mongoose.model(
+  "subscriptions",
+  SubscriptionSchema,
+  "subscriptions"
+);

@@ -1,32 +1,32 @@
 const router = require("express").Router();
-const persons = require("../services/persons");
+const movies = require("../services/movies.js");
 
 router.get("/", async (req, res) => {
-  const data = await persons.get();
+  const data = await movies.get();
   res.json(data);
 });
 
 router.get("/:id", async (req, res) => {
   const { id } = req.params;
-  const data = await persons.get(id);
+  const data = await movies.get(id);
   res.json(data);
 });
 
 router.post("/", async (req, res) => {
-  const status = await persons.post(req.body);
+  const status = await movies.post(req.body);
 
   return res.json(status);
 });
 
 router.put("/:id", async (req, res) => {
   const { id } = req.params;
-  const status = await persons.put(id, req.body);
+  const status = await movies.put(id, req.body);
   res.json(status);
 });
 
 router.delete("/:id", async (req, res) => {
   const { id } = req.params;
-  const status = await persons.delete(id);
+  const status = await movies.delete(id);
   res.json(status);
 });
 
