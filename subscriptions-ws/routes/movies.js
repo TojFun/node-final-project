@@ -1,33 +1,57 @@
 const router = require("express").Router();
-const movies = require("../services/movies.js");
+const { movies } = require("../models/mongoDB");
 
 router.get("/", async (req, res) => {
-  const data = await movies.get();
-  res.json(data);
+  try {
+    const data = await movies.get();
+
+    res.status(200).json(data);
+  } catch (error) {
+    res.status(400).send(error);
+  }
 });
 
 router.get("/:id", async (req, res) => {
-  const { id } = req.params;
-  const data = await movies.get(id);
-  res.json(data);
+  try {
+    const { id } = req.params;
+    const data = await movies.get(id);
+
+    res.status(200).json(data);
+  } catch (error) {
+    res.status(400).send(error);
+  }
 });
 
 router.post("/", async (req, res) => {
-  const status = await movies.post(req.body);
+  try {
+    const status = await movies.post(req.body);
 
-  return res.json(status);
+    return res.status(201).json(status);
+  } catch (error) {
+    res.status(400).send(error);
+  }
 });
 
 router.put("/:id", async (req, res) => {
-  const { id } = req.params;
-  const status = await movies.put(id, req.body);
-  res.json(status);
+  try {
+    const { id } = req.params;
+    const status = await movies.put(id, req.body);
+
+    res.status(200).json(status);
+  } catch (error) {
+    res.status(400).send(error);
+  }
 });
 
 router.delete("/:id", async (req, res) => {
-  const { id } = req.params;
-  const status = await movies.delete(id);
-  res.json(status);
+  try {
+    const { id } = req.params;
+    const status = await movies.delete(id);
+
+    res.status(200).json(status);
+  } catch (error) {
+    res.status(400).send(error);
+  }
 });
 
 module.exports = router;

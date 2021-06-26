@@ -11,12 +11,14 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-setup();
+// !! Uncomment me !!
+// Setting up the DB:
+// setup();
 
 require("./configs/dataBase");
 
-// app.use("/members", membersRoute);
-// app.use("/movies", moviesRoute);
-// app.use("/subscriptions", subscriptionsRoute);
+app.use("/members", membersRoute);
+app.use("/movies", moviesRoute);
+app.use("/subscriptions", subscriptionsRoute);
 
 app.listen(8000);

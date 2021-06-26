@@ -1,12 +1,11 @@
 const moviesAPI = require("../models/moviesAPI");
 const membersAPI = require("../models/membersAPI");
 
-const MoviesDB = require("../models/movies");
-const MembersDB = require("../models/members");
+const { movies: MoviesDB, members: MembersDB } = require("../models/mongoDB");
 
 async function setupDB(db, objects, getNewObject) {
   await objects.forEach(async (object) => {
-    await db.create(getNewObject(object));
+    await db.post(getNewObject(object));
   });
 }
 
@@ -25,7 +24,7 @@ module.exports = async () => {
     });
 
     await setupDB(MembersDB, members, (obj) => {
-      return { name: obj.name, email: obj.email, city: obj.city };
+      return { name: obj.name, email: obj.email, city: obj.address.city };
     });
   } catch (error) {
     throw error;
