@@ -1,0 +1,15 @@
+{
+  "users": [
+    {
+      "id": "60da3477f688cc28efe0de45",
+      "permissions": [
+        "View Subscriptions",
+        "Create Subscriptions",
+        "Delete Subscriptions",
+        "View Movies",
+        "Create Movies",
+        "Delete Movies"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "permissions": [
+    "View Subscriptions",
+    "Create Subscriptions",
+    "Delete Subscriptions",
+    "View Movies",
+    "Create Movies",
+    "Delete Movies"
+  ]
+}

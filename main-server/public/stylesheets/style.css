@@ -1,8 +1,21 @@
+:root {
+  font-size: 1.2em;
+}
+
 body {
   padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  color: #f5f5f5;
+  /* font: 14px "Lucida Grande", Helvetica, Arial, sans-serif; */
 }
 
 a {
-  color: #00B7FF;
+  color: #00b7ff;
+}
+
+/* header {
+  position: fixed;
+} */
+
+form label {
+  font-size: 1.2em;
 }
