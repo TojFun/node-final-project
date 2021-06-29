@@ -1,7 +1,5 @@
-const mongoose = require("mongoose");
-
 class MongoDB {
-  constructor(schemaName, schemaDefinition) {
+  constructor(mongoose, schemaName, schemaDefinition) {
     this.MongoDBModel = mongoose.model(
       schemaName,
       new mongoose.Schema(schemaDefinition),

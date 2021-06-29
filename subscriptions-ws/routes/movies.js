@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const { movies } = require("../models/mongoDB");
+const { movies } = require("../models/mongoSetup");
 
 router.get("/", async (req, res) => {
   try {

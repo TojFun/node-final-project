@@ -1,7 +1,10 @@
 const moviesAPI = require("../models/moviesAPI");
 const membersAPI = require("../models/membersAPI");
 
-const { movies: MoviesDB, members: MembersDB } = require("../models/mongoDB");
+const {
+  movies: MoviesDB,
+  members: MembersDB,
+} = require("../models/mongoSetup");
 
 async function setupDB(db, objects, getNewObject) {
   await objects.forEach(async (object) => {

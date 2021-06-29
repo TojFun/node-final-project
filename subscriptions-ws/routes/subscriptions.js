@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const { subscriptions } = require("../models/mongoDB");
+const { subscriptions } = require("../models/mongoSetup");
 
 router.get("/", async (req, res) => {
   try {
