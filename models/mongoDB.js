@@ -1,11 +1,10 @@
 const mongoose = require("mongoose");
-const { Schema } = mongoose;
 
 class MongoDB {
   constructor(schemaName, schemaDefinition) {
     this.MongoDBModel = mongoose.model(
       schemaName,
-      new Schema(schemaDefinition),
+      new mongoose.Schema(schemaDefinition),
       schemaName
     );
   }
@@ -29,22 +28,4 @@ class MongoDB {
   delete = async (id) => await this.MongoDBModel.findByIdAndDelete(id).exec();
 }
 
-module.exports = {
-  movies: new MongoDB("movies", {
-    name: { type: String, required: true },
-    genres: { type: Array, required: true },
-    image: { type: String, required: true },
-    premiered: { type: Date, required: true },
-  }),
-
-  members: new MongoDB("members", {
-    name: { type: String, required: true },
-    email: { type: String, required: true },
-    city: { type: String, required: true },
-  }),
-
-  subscriptions: new MongoDB("subscriptions", {
-    memberID: { type: String, required: true },
-    movies: { type: Array, required: true },
-  }),
-};
+module.exports = MongoDB;
