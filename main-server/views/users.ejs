@@ -83,11 +83,43 @@
           </div>
         </div>
       </nav>
+
+      <div style="display: flex; justify-content: center">
+        <h1>Movies - Subscriptions Web Site</h1>
+      </div>
     </header>
 
     <main>
-      <div style="display: flex; justify-content: center">
-        <h1>Movies - Subscriptions Web Site</h1>
+      <div class="container">
+        <div class="row">
+          <h2>Users:</h2>
+        </div>
+        <div class="row users">
+          <% users.forEach(user => { %>
+          <div class="user col-6 border">
+            <div class="name">Name: <%= user.name %></div>
+
+            <div class="username">Username: <%= user.username %></div>
+
+            <div class="session-time-out">
+              Session Time Out (Minutes): <%= user.sessionTimeOut %>
+            </div>
+
+            <div class="creation-date">
+              Creation Date: <%= user.creationDate %>
+            </div>
+
+            <div class="Permissions">
+              Permissions:
+              <ul>
+                <% user.permissions.forEach(permission => { %>
+                <li><%= permission %></li>
+                <% }) %>
+              </ul>
+            </div>
+          </div>
+          <% }) %>
+        </div>
       </div>
     </main>
   </body>
