@@ -7,10 +7,8 @@ class MongoDB {
     );
   }
 
-  get = async (id = null) => {
-    if (id === null) return await this.MongoDBModel.find().exec();
-
-    return await this.MongoDBModel.findById(id).exec();
+  get = async (conditions = {}) => {
+    return await this.MongoDBModel.find(conditions).exec();
   };
 
   post = async (obj) => await this.MongoDBModel.create(obj);

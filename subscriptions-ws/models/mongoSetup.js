@@ -3,7 +3,7 @@ const MongoDB = require("../../models/mongoDB");
 
 const movies = new MongoDB(mongoose, "movies", {
   name: { type: String, required: true },
-  genres: { type: Array, required: true },
+  genres: { type: [String], required: true },
   image: { type: String, required: true },
   premiered: { type: Date, required: true },
 });

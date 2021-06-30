@@ -97,7 +97,9 @@
         <div class="row users">
           <% users.forEach(user => { %>
           <div class="user col-6 border">
-            <div class="name">Name: <%= user.name %></div>
+            <div class="name">
+              Name: <%= user.firstName + " " + user.lastName%>
+            </div>
 
             <div class="username">Username: <%= user.username %></div>
 
