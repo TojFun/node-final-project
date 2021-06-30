@@ -35,6 +35,18 @@ require("./configs/dataBase");
 
 app.use(express.static(path.join(__dirname, "public")));
 
+app.use(function (req, res, next) {
+  if (
+    !req.session.user &&
+    !(
+      req.originalUrl.startsWith("/login") ||
+      req.originalUrl.startsWith("/create-account")
+    )
+  )
+    res.redirect("/login");
+  else next();
+});
+
 app.use("/", indexRouter);
 app.use("/login", loginRouter);
 app.use("/create-account", createAccountRouter);
