@@ -6,7 +6,7 @@ const usersBL = require("../services/users");
 /* GET users listing. */
 router.get("/", async function (req, res, next) {
   const users = await usersBL.getAllUsers();
-  console.log(users);
+
   res.render("users", { users });
 });
 

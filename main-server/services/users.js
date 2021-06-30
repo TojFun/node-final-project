@@ -12,7 +12,7 @@ async function getUserData(id, jsonfile) {
 }
 
 async function getUser(condition) {
-  if (!(condition.password && condition.username) || !condition._id)
+  if (!((condition.password && condition.username) || condition._id))
     return null;
 
   const users = await usersDB.get(condition);
