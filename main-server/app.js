@@ -5,8 +5,12 @@ const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const session = require("express-session");
 
+const authenticationMiddleware = require("./services/authentication-middleware");
+
 const indexRouter = require("./routes/index");
+
 const loginRouter = require("./routes/login");
+const logoutRouter = require("./routes/logout");
 const createAccountRouter = require("./routes/createAccount");
 
 const usersRouter = require("./routes/users");
@@ -35,20 +39,12 @@ require("./configs/dataBase");
 
 app.use(express.static(path.join(__dirname, "public")));
 
-app.use(function (req, res, next) {
-  if (
-    !req.session.user &&
-    !(
-      req.originalUrl.startsWith("/login") ||
-      req.originalUrl.startsWith("/create-account")
-    )
-  )
-    res.redirect("/login");
-  else next();
-});
+app.use(authenticationMiddleware);
 
 app.use("/", indexRouter);
+
 app.use("/login", loginRouter);
+app.use("/logout", logoutRouter);
 app.use("/create-account", createAccountRouter);
 
 app.use("/users", usersRouter);
