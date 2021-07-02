@@ -5,7 +5,7 @@
       "firstName": "admin",
       "lastName": "admon",
       "creationDate": "08/09/2005",
-      "sessionTimeOut": "Infinity",
+      "sessionTimeOut": 999999999,
       "role": "admin"
     }
   ]

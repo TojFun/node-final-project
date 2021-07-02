@@ -41,24 +41,33 @@ router.get("/", async function (req, res, next) {
 //   }
 // });
 
-// /* Update Users: */
+/* Update Users: */
 
-// // GET specific user's edit page:
-// router.get("/:username", async (req, res, next) => {
-//   const { error } = req.query;
-//   const { username } = req.params;
+// GET specific user's edit page:
+router.get("/:id", async (req, res, next) => {
+  const { error } = req.query;
+  const { id } = req.params;
 
-//   const title = `Update ${username}`;
-//   const user = await usersManagement.getByUsername(username);
+  const { user: currentUser } = req.session;
 
-//   if (user == null)
-//     return res.render("error", {
-//       message: `Couldn't find the user ${username}`,
-//       error: {},
-//     });
+  const user = id === currentUser.id ? currentUser : await usersBL.getUser(id);
 
-//   res.render("user", { title, user, error });
-// });
+  if (user == null)
+    return res.render("error", {
+      message: `Couldn't find the user with the id of ${id}`,
+      error: {},
+    });
+
+  const permissions = await usersBL.getPermissions(user);
+
+  res.render("user", {
+    title: `Update ${user.username}`,
+    name: currentUser.firstName,
+    user,
+    permissions,
+    error,
+  });
+});
 
 // // POST specific user's info to the server:
 // router.post("/:username", async (req, res, next) => {

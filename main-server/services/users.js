@@ -6,6 +6,8 @@ const {
   permissionsAvailable: permissionsAvailableJSON,
 } = require("../models/jsonInterfaces");
 
+let permissionsAvailable;
+
 async function getUserData(id, jsonfile) {
   const { users: allUsers } = await jsonfile.get();
   return allUsers.find((user) => user.id === id);
@@ -45,6 +47,17 @@ async function getAllUsers() {
   return allUsers;
 }
 
+async function getPermissions({ permissions: userPermissions }) {
+  permissionsAvailable =
+    permissionsAvailable ?? (await permissionsAvailableJSON.get()).permissions;
+
+  const permissions = permissionsAvailable.map((permission) => {
+    return { permission, on: userPermissions.includes(permission) };
+  });
+
+  return permissions;
+}
+
 // nothing works without it
 function formatDBUser(dbUser) {
   const userFromDB = dbUser._doc;
@@ -52,6 +65,6 @@ function formatDBUser(dbUser) {
   delete userFromDB._id;
 
   return userFromDB;
-} // also there must be another way using native mongoose
+} // although, there must be better, probably way using native mongoose.
 
-module.exports = { getUser, getAllUsers };
+module.exports = { getUser, getAllUsers, getPermissions };

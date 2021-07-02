@@ -6,9 +6,11 @@
         "View Subscriptions",
         "Create Subscriptions",
         "Delete Subscriptions",
+        "Update Subscription",
         "View Movies",
         "Create Movies",
-        "Delete Movies"
+        "Delete Movies",
+        "Update Movies"
       ]
     }
   ]
