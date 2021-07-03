@@ -1,12 +1,18 @@
 {
   "permissions": [
-    "View Subscriptions",
-    "Create Subscriptions",
-    "Delete Subscriptions",
-    "Update Subscription",
-    "View Movies",
-    "Create Movies",
-    "Delete Movies",
-    "Update Movies"
+    { "camelCase": "viewSubscriptions", "permission": "View Subscriptions" },
+    {
+      "camelCase": "createSubscriptions",
+      "permission": "Create Subscriptions"
+    },
+    { "camelCase": "updateSubscription", "permission": "Update Subscription" },
+    {
+      "camelCase": "deleteSubscriptions",
+      "permission": "Delete Subscriptions"
+    },
+    { "camelCase": "viewMovies", "permission": "View Movies" },
+    { "camelCase": "createMovies", "permission": "Create Movies" },
+    { "camelCase": "updateMovies", "permission": "Update Movies" },
+    { "camelCase": "deleteMovies", "permission": "Delete Movies" }
   ]
 }

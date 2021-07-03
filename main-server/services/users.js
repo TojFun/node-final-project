@@ -9,8 +9,8 @@ const {
 let permissionsAvailable;
 
 async function getUserData(id, jsonfile) {
-  const { users: allUsers } = await jsonfile.get();
-  return allUsers.find((user) => user.id === id);
+  const { users } = await jsonfile.get();
+  return users.find((user) => user.id === id);
 }
 
 async function getUser(condition) {
@@ -48,14 +48,36 @@ async function getAllUsers() {
 }
 
 async function getPermissions({ permissions: userPermissions }) {
-  permissionsAvailable =
-    permissionsAvailable ?? (await permissionsAvailableJSON.get()).permissions;
+  getAllPermissions();
 
   const permissions = permissionsAvailable.map((permission) => {
-    return { permission, on: userPermissions.includes(permission) };
+    return {
+      ...permission,
+      on: userPermissions.includes(permission.permission),
+    };
   });
 
   return permissions;
+}
+
+async function updateUser(id, newUser) {
+  const { firstName, lastName, username } = newUser;
+
+  getAllPermissions();
+}
+
+async function getAllPermissions() {
+  if (!permissionsAvailable)
+    permissionsAvailable = (await permissionsAvailableJSON.get()).permissions;
+  return;
+}
+
+function camelCase(str) {
+  return str
+    .replace(/(?:^\w|[A-Z]|\b\w)/g, (word, index) => {
+      return index === 0 ? word.toLowerCase() : word.toUpperCase();
+    })
+    .replace(/\s+/g, "");
 }
 
 // nothing works without it
@@ -65,6 +87,6 @@ function formatDBUser(dbUser) {
   delete userFromDB._id;
 
   return userFromDB;
-} // although, there must be better, probably way using native mongoose.
+} // although there must be better way using native mongoose.
 
 module.exports = { getUser, getAllUsers, getPermissions };

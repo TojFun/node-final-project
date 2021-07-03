@@ -69,18 +69,20 @@ router.get("/:id", async (req, res, next) => {
   });
 });
 
-// // POST specific user's info to the server:
-// router.post("/:username", async (req, res, next) => {
-//   const { username } = req.params;
-//   const { body: user } = req;
+// POST specific user's info to the server:
+router.post("/:id", async (req, res, next) => {
+  const { id } = req.params;
+  const { body: user } = req;
 
-//   try {
-//     await usersManagement.update(username, user);
-//     res.redirect("/users?status=updated");
-//   } catch (err) {
-//     res.redirect(`/users/${username}?error=${err.message}`);
-//   }
-// });
+  console.log(id, user);
+
+  // try {
+  //   await usersManagement.update(username, user);
+  //   res.redirect("/users?status=updated");
+  // } catch (err) {
+  //   res.redirect(`/users/${username}?error=${err.message}`);
+  // }
+});
 
 // // DELETE a specific user:
 // router.delete("/:username", async (req, res, next) => {

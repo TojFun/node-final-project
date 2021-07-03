@@ -180,30 +180,26 @@
                 <label class="" for="permissions">Permissions: </label>
 
                 <div class="permissions-checkboxes offset-1">
-                  <% permissions.forEach(({ permission, on }) => { %>
+                  <% permissions.forEach(({ permission, camelCase, on }) => { %>
 
                   <div class="permission">
                     <% if (on) { %>
                     <input
                       type="checkbox"
-                      name="permissions"
-                      id="<%=permission.toLowerCase().replace(/\s/g, '-' ) %>"
+                      name="<%= camelCase %>"
+                      id="<%= camelCase %>"
                       checked
                     />
 
                     <% } else { %>
                     <input
                       type="checkbox"
-                      name="permissions"
-                      id="<%=permission.toLowerCase().replace(/\s/g, '-' ) %>"
+                      name="<%= camelCase %>"
+                      id="<%= camelCase %>"
                     />
                     <% } %>
 
-                    <label
-                      for="<%= permission.toLowerCase().replace(/\s/g, '-') %>"
-                    >
-                      <%= permission %>
-                    </label>
+                    <label for="<%= camelCase %>"> <%= permission %> </label>
                   </div>
                   <% }) %>
                 </div>
