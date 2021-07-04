@@ -64,7 +64,7 @@ async function updateUser(id, newUser) {
   const { firstName, lastName, username, sessionTimeOut } = newUser;
 
   const jsonUser = { firstName, lastName, sessionTimeOut };
-  const permissions = getNewUserPermissions(newUser)
+  const permissions = await getNewUserPermissions(newUser)
 
   await updateUsersJSON(usersJSON, (user) => Object.assign(user, jsonUser));
   await updateUsersJSON(permissionsJSON, (user) => { return { id, permissions } });
@@ -72,12 +72,10 @@ async function updateUser(id, newUser) {
   await usersDB.put((id, data) => Object.assign(data, { username }))
 }
 
-
-
-function getNewUserPermissions(newUser) {
+async function getNewUserPermissions(newUser) {
   const permissions = [];
 
-  getAllPermissions();
+  await getAllPermissions();
 
   permissionsAvailable.foreach(permission => {
     if (newUser[permission.camelCase] === "on")
@@ -98,7 +96,12 @@ async function updateUsersJSON(jsonfile, whatToDo) {
 }
 
 async function createNewUser(newUser) {
+  const { firstName, lastName, username, sessionTimeOut } = newUser;
 
+  const jsonUser = { firstName, lastName, sessionTimeOut };
+  const permissions = await getNewUserPermissions(newUser)
+
+  await usersDB.post({ username, password: "NONE" })
 }
 
 async function getAllPermissions() {
