@@ -8,6 +8,10 @@ const {
 
 let permissionsAvailable;
 
+(async () => {
+  permissionsAvailable = (await permissionsAvailableJSON.get()).permissions;
+})();
+
 async function getUserData(id, jsonfile) {
   const { users } = await jsonfile.get();
   return users.find((user) => user.id === id);
@@ -48,12 +52,10 @@ async function getAllUsers() {
 }
 
 async function getPermissions({ permissions: userPermissions }) {
-  getAllPermissions();
-
   const permissions = permissionsAvailable.map((permission) => {
     return {
       ...permission,
-      on: userPermissions.includes(permission.permission),
+      on: userPermissions?.includes(permission.permission),
     };
   });
 
@@ -64,20 +66,20 @@ async function updateUser(id, newUser) {
   const { firstName, lastName, username, sessionTimeOut } = newUser;
 
   const jsonUser = { firstName, lastName, sessionTimeOut };
-  const permissions = await getNewUserPermissions(newUser)
+  const permissions = getNewUserPermissions(newUser);
 
-  await updateUsersJSON(usersJSON, (user) => Object.assign(user, jsonUser));
-  await updateUsersJSON(permissionsJSON, (user) => { return { id, permissions } });
+  await updateUsersJSON(id, usersJSON, (user) => Object.assign(user, jsonUser));
+  await updateUsersJSON(id, permissionsJSON, (user) => {
+    return { id, permissions };
+  });
 
-  await usersDB.put((id, data) => Object.assign(data, { username }))
+  await usersDB.put(id, (data) => Object.assign(data, { username }));
 }
 
-async function getNewUserPermissions(newUser) {
+function getNewUserPermissions(newUser) {
   const permissions = [];
 
-  await getAllPermissions();
-
-  permissionsAvailable.foreach(permission => {
+  permissionsAvailable.forEach((permission) => {
     if (newUser[permission.camelCase] === "on")
       permissions.push(permission.permission);
   });
@@ -85,24 +87,22 @@ async function getNewUserPermissions(newUser) {
   return permissions;
 }
 
-async function updateUsersJSON(jsonfile, whatToDo) {
+async function updateUsersJSON(id, jsonfile, whatToDo) {
   await jsonfile.update(({ users }) => {
     const index = users.findIndex((user) => user.id === id);
 
-    users[index] = whatToDo(users[index])
+    users[index] = whatToDo(users[index]);
 
-    return { users }
-  })
+    return { users };
+  });
 }
 
-async function createNewUser(newUser) {
+async function createUser(newUser) {
   const { firstName, lastName, username, sessionTimeOut } = newUser;
 
-  const jsonUser = { firstName, lastName, sessionTimeOut };
-  const permissions = await getNewUserPermissions(newUser)
+  const permissions = getNewUserPermissions(newUser);
 
-
-  const id = await usersDB.post({ username, password: "NONE" })
+  const { id } = await usersDB.post({ username, password: "NONE" });
 
   await createJSONUser(usersJSON, {
     id,
@@ -110,27 +110,19 @@ async function createNewUser(newUser) {
     lastName,
     sessionTimeOut,
     creationDate: new Date().toJSON().slice(0, 10),
-    role: "user"
-  })
+    role: "user",
+  });
 
-  await createJSONUser(permissionsJSON, { id, permissions })
+  await createJSONUser(permissionsJSON, { id, permissions });
 }
 
 async function createJSONUser(jsonfile, user) {
   await jsonfile.update(({ users }) => {
-    users.push(user)
+    users.push(user);
 
-    return { users }
-  })
+    return { users };
+  });
 }
-
-async function getAllPermissions() {
-  if (!permissionsAvailable)
-    permissionsAvailable = (await permissionsAvailableJSON.get()).permissions;
-  return;
-}
-
-
 
 // nothing works without it
 function formatDBUser(dbUser) {
@@ -141,4 +133,10 @@ function formatDBUser(dbUser) {
   return userFromDB;
 } // although there must be better way using native mongoose.
 
-module.exports = { getUser, getAllUsers, getPermissions };
+module.exports = {
+  getUser,
+  getAllUsers,
+  updateUser,
+  createUser,
+  getPermissions,
+};
