@@ -13,10 +13,10 @@ class MongoDB {
 
   post = async (obj) => await this.MongoDBModel.create(obj);
 
-  put = async (id, object) => {
-    const data = await get(id);
+  put = async (id, whatToDo) => {
+    const data = await this.get(id);
 
-    const newObject = Object.assign(data, object);
+    const newObject = whatToDo(data);
 
     return await this.MongoDBModel.findByIdAndUpdate(id, newObject).exec();
   };

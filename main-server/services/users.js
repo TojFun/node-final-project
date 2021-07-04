@@ -61,9 +61,44 @@ async function getPermissions({ permissions: userPermissions }) {
 }
 
 async function updateUser(id, newUser) {
-  const { firstName, lastName, username } = newUser;
+  const { firstName, lastName, username, sessionTimeOut } = newUser;
+
+  const jsonUser = { firstName, lastName, sessionTimeOut };
+  const permissions = getNewUserPermissions(newUser)
+
+  await updateUsersJSON(usersJSON, (user) => Object.assign(user, jsonUser));
+  await updateUsersJSON(permissionsJSON, (user) => { return { id, permissions } });
+
+  await usersDB.put((id, data) => Object.assign(data, { username }))
+}
+
+
+
+function getNewUserPermissions(newUser) {
+  const permissions = [];
 
   getAllPermissions();
+
+  permissionsAvailable.foreach(permission => {
+    if (newUser[permission.camelCase] === "on")
+      permissions.push(permission.permission);
+  });
+
+  return permissions;
+}
+
+async function updateUsersJSON(jsonfile, whatToDo) {
+  await jsonfile.update(({ users }) => {
+    const index = users.findIndex((user) => user.id === id);
+
+    users[index] = whatToDo(users[index])
+
+    return { users }
+  })
+}
+
+async function createNewUser(newUser) {
+
 }
 
 async function getAllPermissions() {
@@ -72,13 +107,7 @@ async function getAllPermissions() {
   return;
 }
 
-function camelCase(str) {
-  return str
-    .replace(/(?:^\w|[A-Z]|\b\w)/g, (word, index) => {
-      return index === 0 ? word.toLowerCase() : word.toUpperCase();
-    })
-    .replace(/\s+/g, "");
-}
+
 
 // nothing works without it
 function formatDBUser(dbUser) {
