@@ -101,7 +101,27 @@ async function createNewUser(newUser) {
   const jsonUser = { firstName, lastName, sessionTimeOut };
   const permissions = await getNewUserPermissions(newUser)
 
-  await usersDB.post({ username, password: "NONE" })
+
+  const id = await usersDB.post({ username, password: "NONE" })
+
+  await createJSONUser(usersJSON, {
+    id,
+    firstName,
+    lastName,
+    sessionTimeOut,
+    creationDate: new Date().toJSON().slice(0, 10),
+    role: "user"
+  })
+
+  await createJSONUser(permissionsJSON, { id, permissions })
+}
+
+async function createJSONUser(jsonfile, user) {
+  await jsonfile.update(({ users }) => {
+    users.push(user)
+
+    return { users }
+  })
 }
 
 async function getAllPermissions() {
