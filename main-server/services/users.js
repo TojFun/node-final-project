@@ -6,17 +6,16 @@ const {
   permissionsAvailable: permissionsAvailableJSON,
 } = require("../models/jsonInterfaces");
 
+// get all permissions available:
 let permissionsAvailable;
 
 (async () => {
   permissionsAvailable = (await permissionsAvailableJSON.get()).permissions;
 })();
 
-async function getUserData(id, jsonfile) {
-  const { users } = await jsonfile.get();
-  return users.find((user) => user.id === id);
-}
+/* Functions: */
 
+// Main Functions:
 async function getUser(condition) {
   if (!((condition.password && condition.username) || condition._id))
     return null;
@@ -68,33 +67,12 @@ async function updateUser(id, newUser) {
   const jsonUser = { firstName, lastName, sessionTimeOut };
   const permissions = getNewUserPermissions(newUser);
 
-  await updateUsersJSON(id, usersJSON, (user) => Object.assign(user, jsonUser));
-  await updateUsersJSON(id, permissionsJSON, (user) => {
+  await updateJSONUsers(id, usersJSON, (user) => Object.assign(user, jsonUser));
+  await updateJSONUsers(id, permissionsJSON, (user) => {
     return { id, permissions };
   });
 
   await usersDB.put(id, (data) => Object.assign(data, { username }));
-}
-
-function getNewUserPermissions(newUser) {
-  const permissions = [];
-
-  permissionsAvailable.forEach((permission) => {
-    if (newUser[permission.camelCase] === "on")
-      permissions.push(permission.permission);
-  });
-
-  return permissions;
-}
-
-async function updateUsersJSON(id, jsonfile, whatToDo) {
-  await jsonfile.update(({ users }) => {
-    const index = users.findIndex((user) => user.id === id);
-
-    users[index] = whatToDo(users[index]);
-
-    return { users };
-  });
 }
 
 async function createUser(newUser) {
@@ -116,6 +94,39 @@ async function createUser(newUser) {
   await createJSONUser(permissionsJSON, { id, permissions });
 }
 
+async function deleteUser(id) {
+  await usersDB.delete(id);
+  await deleteJSONUser(id, usersJSON);
+  await deleteJSONUser(id, permissionsJSON);
+}
+
+// Utils Functions:
+async function getUserData(id, jsonfile) {
+  const { users } = await jsonfile.get();
+  return users.find((user) => user.id === id);
+}
+
+function getNewUserPermissions(newUser) {
+  const permissions = [];
+
+  permissionsAvailable.forEach((permission) => {
+    if (newUser[permission.camelCase] === "on")
+      permissions.push(permission.permission);
+  });
+
+  return permissions;
+}
+
+async function updateJSONUsers(id, jsonfile, whatToDo) {
+  await jsonfile.update(({ users }) => {
+    const index = users.findIndex((user) => user.id === id);
+
+    users[index] = whatToDo(users[index]);
+
+    return { users };
+  });
+}
+
 async function createJSONUser(jsonfile, user) {
   await jsonfile.update(({ users }) => {
     users.push(user);
@@ -124,6 +135,15 @@ async function createJSONUser(jsonfile, user) {
   });
 }
 
+async function deleteJSONUser(id, jsonfile) {
+  await jsonfile.update(({ users }) => {
+    const index = users.findIndex((user) => user.id === id);
+
+    users.splice(index, 1);
+
+    return { users };
+  });
+}
 // nothing works without it
 function formatDBUser(dbUser) {
   const userFromDB = dbUser._doc;
@@ -138,5 +158,6 @@ module.exports = {
   getAllUsers,
   updateUser,
   createUser,
+  deleteUser,
   getPermissions,
 };

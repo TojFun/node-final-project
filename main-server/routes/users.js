@@ -86,10 +86,14 @@ router.post("/:id", async (req, res, next) => {
   }
 });
 
-// // DELETE a specific user:
-// router.delete("/:username", async (req, res, next) => {
-//   const deletingStatus = await usersManagement.delete(req.params.username);
-//   res.json(deletingStatus.ok);
-// });
+// DELETE a specific user:
+router.delete("/:id", async (req, res, next) => {
+  try {
+    const deletingStatus = await usersBL.deleteUser(req.params.id);
+    return res.status(200).json({ ok: true, error: null });
+  } catch (error) {
+    return res.status(400).json({ ok: false, error });
+  }
+});
 
 module.exports = router;
