@@ -1,1 +1,17 @@
-{"users":[{"id":"60da3477f688cc28efe0de45","permissions":["View Subscriptions","Create Subscriptions","Update Subscription","Delete Subscriptions","View Movies","Create Movies","Update Movies","Delete Movies"]},{"id":"60e2e5643eeca62384392998","permissions":["View Subscriptions","Update Subscription","View Movies","Create Movies"]}]}
+{
+  "users": [
+    {
+      "id": "60da3477f688cc28efe0de45",
+      "permissions": [
+        "View Subscriptions",
+        "Create Subscriptions",
+        "Update Subscriptions",
+        "Delete Subscriptions",
+        "View Movies",
+        "Create Movies",
+        "Update Movies",
+        "Delete Movies"
+      ]
+    }
+  ]
+}
