@@ -14,6 +14,7 @@ const logoutRouter = require("./routes/logout");
 const createAccountRouter = require("./routes/createAccount");
 
 const usersRouter = require("./routes/users");
+const addUserRouter = require("./routes/add-user");
 
 require("dotenv").config();
 
@@ -47,6 +48,7 @@ app.use("/login", loginRouter);
 app.use("/logout", logoutRouter);
 app.use("/create-account", createAccountRouter);
 
+app.use("/users/add", addUserRouter);
 app.use("/users", usersRouter);
 
 // catch 404 and forward to error handler

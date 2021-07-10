@@ -17,35 +17,7 @@ router.get("/", async function (req, res, next) {
   res.render("users", { users, status, name: req.session.user.firstName });
 });
 
-/* Add User: */
-
-// GET the "add user" page:
-router.get("/add", async (req, res, next) => {
-  const { error } = req.query;
-  const permissions = await usersBL.getPermissions({});
-
-  res.render("user", {
-    title: "Add User",
-    name: req.session.user.firstName,
-    user: { id: "add" },
-    permissions,
-    error,
-  });
-});
-
-// POST new user to the server:
-router.post("/add", async (req, res, next) => {
-  const { body: user } = req;
-
-  try {
-    await usersBL.createUser(user);
-    res.redirect("/users?status=added");
-  } catch (error) {
-    res.render("error", { message: error.message, error });
-  }
-});
-
-/* Update Users: */
+/* Update User */
 
 // GET specific user's edit page:
 router.get("/:id", async (req, res, next) => {
@@ -54,7 +26,8 @@ router.get("/:id", async (req, res, next) => {
 
   const { user: currentUser } = req.session;
 
-  const user = id === currentUser.id ? currentUser : await usersBL.getUser(id);
+  const user =
+    id === currentUser.id ? currentUser : await usersBL.getUser({ _id: id });
 
   if (user == null)
     return res.render("error", {
@@ -80,6 +53,7 @@ router.post("/:id", async (req, res, next) => {
 
   try {
     await usersBL.updateUser(id, user);
+
     res.redirect("/users?status=updated");
   } catch (error) {
     res.render("error", { message: error.message, error });
@@ -89,7 +63,8 @@ router.post("/:id", async (req, res, next) => {
 // DELETE a specific user:
 router.delete("/:id", async (req, res, next) => {
   try {
-    const deletingStatus = await usersBL.deleteUser(req.params.id);
+    usersBL.deleteUser(req.params.id);
+
     return res.status(200).json({ ok: true, error: null });
   } catch (error) {
     return res.status(400).json({ ok: false, error });

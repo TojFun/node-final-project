@@ -5,7 +5,10 @@
       "camelCase": "createSubscriptions",
       "permission": "Create Subscriptions"
     },
-    { "camelCase": "updateSubscription", "permission": "Update Subscription" },
+    {
+      "camelCase": "updateSubscriptions",
+      "permission": "Update Subscriptions"
+    },
     {
       "camelCase": "deleteSubscriptions",
       "permission": "Delete Subscriptions"

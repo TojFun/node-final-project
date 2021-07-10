@@ -54,7 +54,7 @@ async function getPermissions({ permissions: userPermissions }) {
   const permissions = permissionsAvailable.map((permission) => {
     return {
       ...permission,
-      on: userPermissions?.includes(permission.permission),
+      on: userPermissions.includes(permission.permission),
     };
   });
 
