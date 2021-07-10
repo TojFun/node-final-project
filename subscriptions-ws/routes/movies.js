@@ -3,7 +3,7 @@ const { movies } = require("../models/mongoSetup");
 
 router.get("/", async (req, res) => {
   try {
-    const data = await movies.get();
+    const data = await movies.get({});
 
     res.status(200).json(data);
   } catch (error) {
@@ -14,7 +14,7 @@ router.get("/", async (req, res) => {
 router.get("/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const data = await movies.get(id);
+    const data = await movies.get({ _id: id });
 
     res.status(200).json(data);
   } catch (error) {
@@ -35,7 +35,9 @@ router.post("/", async (req, res) => {
 router.put("/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const status = await movies.put(id, req.body);
+    const status = await movies.put(id, (data) =>
+      Object.assign(data, req.body)
+    );
 
     res.status(200).json(status);
   } catch (error) {
