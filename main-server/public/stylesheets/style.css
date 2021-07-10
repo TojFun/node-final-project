@@ -10,26 +10,11 @@ body {
 main {
   padding: 5vw;
 }
-/* 
-header {
-  position: fixed;
-  width: 100%;
-} */
 
 a {
   color: #00b7ff;
 }
 
-/* header {
-  position: fixed;
-} */
-
 form label {
   font-size: 1.2em;
 }
-/* 
-@media screen and (max-width: 528px) {
-  body {
-    font-size: 3em;
-  }
-} */
