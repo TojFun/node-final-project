@@ -1,10 +1,12 @@
+@import url("https://fonts.googleapis.com/css2?family=Otomanopee+One&display=swap");
+
 :root {
   font-size: 1.2em;
 }
 
 body {
   color: #f5f5f5;
-  /* font: 14px "Lucida Grande", Helvetica, Arial, sans-serif; */
+  font-family: "Otomanopee One", Helvetica, Arial, sans-serif;
 }
 
 main {

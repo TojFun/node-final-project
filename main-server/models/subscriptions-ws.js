@@ -6,21 +6,13 @@ class SubscriptionWSClient {
     this.path = PATH + route + "/";
   }
 
-  async get(id = "") {
-    return await axios.get(this.path + id);
-  }
+  get = async (id = "") => (await axios.get(this.path + id)).data;
 
-  async post() {
-    return await axios.post(this.path);
-  }
+  post = async () => await axios.post(this.path);
 
-  async put(id) {
-    return await axios.put(this.path + id);
-  }
+  put = async (id) => await axios.put(this.path + id);
 
-  async delete(id) {
-    return await axios.delete(this.path + id);
-  }
+  delete = async (id) => await axios.delete(this.path + id);
 }
 
 module.exports = {

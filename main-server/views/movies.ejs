@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <title>Index</title>
 
@@ -66,9 +66,9 @@
                   aria-labelledby="navbarDropdownMenuLink"
                 >
                   <li>
-                    <a class="dropdown-item active" href="/movies"
-                      > All Movies </a
-                    >
+                    <a class="dropdown-item active" href="/movies">
+                      All Movies
+                    </a>
                   </li>
                   <li>
                     <a class="dropdown-item" href="/movies/add">Add Movie</a>
@@ -130,51 +130,83 @@
     <main>
       <div class="container">
         <div class="row">
-          <h2>Users:</h2>
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-lg-3">
+                <h2>Movies:</h2>
+              </div>
+              <div class="col-lg-9">
+                <div class="container-fluid">
+                  <form
+                    class="row"
+                    action="/movies"
+                    method="get"
+                    style="display: flex; justify-content: space-between"
+                  >
+                    <label class="col-3" for="search">Find Movie:</label>
+                    <input
+                      class="col-6"
+                      type="text"
+                      name="search"
+                      id="search"
+                    />
+
+                    <input
+                      class="btn btn-secondary col-2"
+                      type="submit"
+                      value="Find"
+                    />
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
-        <div class="row users">
-          <% users.forEach(user => { %>
-          <div class="user col-6 border">
+        <div class="row movies">
+          <% movies.forEach(movie => { %>
+          <div class="movie col-6 col-lg-4 col-xl-3 col-xxl-2 border">
             <div class="name">
-              Name: <%= user.firstName + " " + user.lastName%>
+              Name: <%= `${movie.name}, ${(new
+              Date(movie.premiered)).getFullYear()}` %>
             </div>
 
-            <div class="username">Username: <%= user.username %></div>
+            <div class="genres">Genres: <%= movie.genres.join(", ") %>.</div>
 
-            <div class="session-time-out">
-              Session Time Out (Minutes): <%= user.sessionTimeOut %>
+            <div class="img">
+              <img
+                src="<%= movie.image %>"
+                alt="Couldn't load image"
+                width="100%"
+              />
             </div>
 
-            <div class="creation-date">
-              Creation Date: <%= user.creationDate %>
-            </div>
-
-            <div class="permissions">
-              Permissions:
+            <div class="subscriptions border">
+              Subscriptions watched:
               <ul>
-                <% user.permissions.forEach(permission => { %>
-                <li><%= permission %></li>
+                <% movie.subscriptions?.forEach(subscription => { %>
+                <li>
+                  <%= subscription.name %>, <%= new
+                  Date(subscription.date).toJSON().slice(0,10) %>
+                </li>
                 <% }) %>
               </ul>
             </div>
 
             <div class="btns">
               <span>
-                <a class="btn btn-primary" href="users/<%=user.id%>">Edit</a>
+                <a class="btn btn-primary" href="movies/<%=movie._id%>">Edit</a>
               </span>
 
-              <% if (user.role !== "admin") { %>
               <span>
                 <a
                   class="btn btn-primary"
                   href=""
-                  onclick="deleteUser('<%=user.id%>')"
+                  onclick="deleteMovie('<%=movie._id%>')"
                 >
                   Delete
                 </a>
               </span>
-              <% } %>
             </div>
           </div>
           <% }) %>

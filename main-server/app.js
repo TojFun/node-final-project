@@ -7,15 +7,22 @@ const session = require("express-session");
 
 const authenticationMiddleware = require("./services/authentication-middleware");
 
+// Routes:
 const indexRouter = require("./routes/index");
 
+// Login routes:
 const loginRouter = require("./routes/login");
 const logoutRouter = require("./routes/logout");
 const createAccountRouter = require("./routes/createAccount");
 
+// User routes:
 const usersRouter = require("./routes/users");
 const addUserRouter = require("./routes/add-user");
 
+// Movie routes:
+const moviesRouter = require("./routes/movies");
+
+// Configs:
 require("dotenv").config();
 
 const app = express();
@@ -50,6 +57,8 @@ app.use("/create-account", createAccountRouter);
 
 app.use("/users/add", addUserRouter);
 app.use("/users", usersRouter);
+
+app.use("/movies", moviesRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
