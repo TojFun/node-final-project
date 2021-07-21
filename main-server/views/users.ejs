@@ -21,7 +21,7 @@
       crossorigin="anonymous"
     />
 
-    <script src="/javascripts/users.js" defer></script>
+    <script src="/javascripts/delete.js" defer></script>
     <link rel="stylesheet" href="/stylesheets/style.css" />
   </head>
 
@@ -168,7 +168,7 @@
                 <a
                   class="btn btn-primary"
                   href=""
-                  onclick="deleteUser('<%=user.id%>')"
+                  onclick="deleteThing('<%=user.id%>', 'user')"
                 >
                   Delete
                 </a>

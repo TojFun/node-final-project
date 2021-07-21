@@ -7,7 +7,7 @@ const moviesBL = require("../services/movies");
 router.get("/", async function (req, res, next) {
   const { search } = req.query;
 
-  const movies = await moviesBL.getAllMovies(search);
+  const movies = await moviesBL.getAll(search);
 
   res.render("movies", { movies, name: req.session.user.firstName });
 });
@@ -57,15 +57,15 @@ router.get("/", async function (req, res, next) {
 //   }
 // });
 
-// // DELETE a specific movie:
-// router.delete("/:id", async (req, res, next) => {
-//   try {
-//     moviesBL.deleteMovie(req.params.id);
+// DELETE a specific movie:
+router.delete("/:id", async (req, res, next) => {
+  try {
+    moviesBL.delete(req.params.id);
 
-//     return res.status(200).json({ ok: true, error: null });
-//   } catch (error) {
-//     return res.status(400).json({ ok: false, error });
-//   }
-// });
+    return res.status(200).json({ ok: true, error: null });
+  } catch (error) {
+    return res.status(400).json({ ok: false, error });
+  }
+});
 
 module.exports = router;

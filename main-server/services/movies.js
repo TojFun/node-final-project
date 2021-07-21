@@ -33,4 +33,17 @@ async function getAllMovies(search) {
   return movies;
 }
 
-module.exports = { getAllMovies };
+async function deleteMovie(id) {
+  const subscriptions = await subscriptionsWS.get();
+
+  subscriptions.forEach(async (subscription) => {
+    const movies = subscription.movies.filter((movie) => movie._id != id);
+
+    if (movies.length !== subscription.movies.length)
+      await subscriptionsWS.put(subscription._id, { ...subscription, movies });
+  });
+
+  await moviesWS.delete(id);
+}
+
+module.exports = { getAll: getAllMovies, delete: deleteMovie };

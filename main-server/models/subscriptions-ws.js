@@ -8,9 +8,9 @@ class SubscriptionWSClient {
 
   get = async (id = "") => (await axios.get(this.path + id)).data;
 
-  post = async () => await axios.post(this.path);
+  post = async (data) => await axios.post(this.path, data);
 
-  put = async (id) => await axios.put(this.path + id);
+  put = async (id, data) => await axios.put(this.path + id, data);
 
   delete = async (id) => await axios.delete(this.path + id);
 }

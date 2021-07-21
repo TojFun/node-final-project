@@ -21,6 +21,7 @@
       crossorigin="anonymous"
     />
 
+    <script src="/javascripts/delete.js" defer></script>
     <link rel="stylesheet" href="/stylesheets/style.css" />
   </head>
 
@@ -202,7 +203,7 @@
                 <a
                   class="btn btn-primary"
                   href=""
-                  onclick="deleteMovie('<%=movie._id%>')"
+                  onclick="deleteThing('<%=movie._id%>', 'movie')"
                 >
                   Delete
                 </a>
