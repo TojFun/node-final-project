@@ -7,9 +7,13 @@ const moviesBL = require("../services/movies");
 router.get("/", async function (req, res, next) {
   const { search } = req.query;
 
-  const movies = await moviesBL.getAll(search);
+  try {
+    const movies = await moviesBL.getAll(search);
 
-  res.render("movies", { movies, name: req.session.user.firstName });
+    res.render("movies", { movies, name: req.session.user.firstName });
+  } catch (error) {
+    res.render("error", { message: "Couldn't connect to ws", error });
+  }
 });
 
 /* Update Movie */

@@ -7,10 +7,9 @@ class MongoDB {
     );
   }
 
-  get = async (conditions = {}) =>
-    await this.MongoDBModel.find(conditions).exec();
+  get = (conditions = {}) => this.MongoDBModel.find(conditions).exec();
 
-  post = async (obj) => await this.MongoDBModel.create(obj);
+  post = (obj) => this.MongoDBModel.create(obj);
 
   put = async (id, whatToDo) => {
     const data = (await this.get({ _id: id }))[0];
@@ -22,7 +21,7 @@ class MongoDB {
     return newObject;
   };
 
-  delete = async (id) => await this.MongoDBModel.findByIdAndDelete(id).exec();
+  delete = (id) => this.MongoDBModel.findByIdAndDelete(id).exec();
 }
 
 module.exports = MongoDB;
