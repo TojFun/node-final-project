@@ -21,6 +21,7 @@ const addUserRouter = require("./routes/add-user");
 
 // Movie routes:
 const moviesRouter = require("./routes/movies");
+const addMovieRouter = require("./routes/add-movie");
 
 // Configs:
 require("dotenv").config();
@@ -58,6 +59,7 @@ app.use("/create-account", createAccountRouter);
 app.use("/users/add", addUserRouter);
 app.use("/users", usersRouter);
 
+app.use("/movies/add", addMovieRouter);
 app.use("/movies", moviesRouter);
 
 // catch 404 and forward to error handler

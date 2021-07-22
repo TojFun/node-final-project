@@ -4,6 +4,8 @@ const {
   subscriptions: subscriptionsWS,
 } = require("../models/subscriptions-ws");
 
+const getMovie = async (id) => (await moviesWS.get(id))[0];
+
 async function getAllMovies(search) {
   const movies = await moviesWS.get();
   const members = await membersWS.get();
@@ -33,6 +35,18 @@ async function getAllMovies(search) {
   return movies;
 }
 
+function createMovie(movie) {
+  movie.genres = movie.genres.split(/[ ,]+/);
+
+  return moviesWS.post(movie);
+}
+
+function updateMovie(id, movie) {
+  movie.genres = movie.genres.split(/[ ,]+/);
+
+  return moviesWS.put(id, movie);
+}
+
 async function deleteMovie(id) {
   const subscriptions = await subscriptionsWS.get();
 
@@ -46,4 +60,12 @@ async function deleteMovie(id) {
   await moviesWS.delete(id);
 }
 
-module.exports = { getAll: getAllMovies, delete: deleteMovie };
+module.exports = {
+  get: getMovie,
+  getAll: getAllMovies,
+
+  create: createMovie,
+  update: updateMovie,
+
+  delete: deleteMovie,
+};

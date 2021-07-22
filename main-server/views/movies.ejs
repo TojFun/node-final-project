@@ -77,8 +77,29 @@
                 </ul>
               </li>
 
-              <li class="nav-item">
-                <a class="nav-link" href="/subscriptions">Subscriptions</a>
+              <li class="nav-item dropdown">
+                <a
+                  class="nav-link dropdown-toggle"
+                  id="navbarDropdownMenuLink"
+                  href="#"
+                  role="button"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  Subscriptions
+                </a>
+
+                <ul
+                  class="dropdown-menu"
+                  aria-labelledby="navbarDropdownMenuLink"
+                >
+                  <li>
+                    <a class="dropdown-item" href="/members">All Members</a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="/members/add">Add Member</a>
+                  </li>
+                </ul>
               </li>
 
               <li class="nav-item dropdown">
@@ -187,8 +208,10 @@
               <ul>
                 <% movie.subscriptions?.forEach(subscription => { %>
                 <li>
-                  <%= subscription.name %>, <%= new
-                  Date(subscription.date).toJSON().slice(0,10) %>
+                  <a href="/members/<%= subscription._id %>"
+                    ><%= subscription.name %></a
+                  >
+                  , <%= new Date(subscription.date).toJSON().slice(0,10) %>
                 </li>
                 <% }) %>
               </ul>

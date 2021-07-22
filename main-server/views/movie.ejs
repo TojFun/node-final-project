@@ -52,7 +52,7 @@
 
               <li class="nav-item dropdown">
                 <a
-                  class="nav-link dropdown-toggle"
+                  class="nav-link dropdown-toggle active"
                   id="navbarDropdownMenuLink"
                   href="#"
                   role="button"
@@ -66,12 +66,27 @@
                   class="dropdown-menu"
                   aria-labelledby="navbarDropdownMenuLink"
                 >
+                  <% if (title === "Add User") { %>
                   <li>
-                    <a class="dropdown-item" href="/movies"> All Movies </a>
+                    <a class="dropdown-item" href="/movies">All Movies</a>
                   </li>
+
+                  <li>
+                    <a class="dropdown-item active" href="/movies/add">
+                      Add Movie
+                    </a>
+                  </li>
+                  <% } else { %>
+                  <li>
+                    <a class="dropdown-item active" href="/movies">
+                      All Movies
+                    </a>
+                  </li>
+
                   <li>
                     <a class="dropdown-item" href="/movies/add">Add Movie</a>
                   </li>
+                  <% } %>
                 </ul>
               </li>
 
@@ -102,7 +117,7 @@
 
               <li class="nav-item dropdown">
                 <a
-                  class="nav-link dropdown-toggle active"
+                  class="nav-link dropdown-toggle"
                   id="navbarDropdownMenuLink"
                   href="#"
                   role="button"
@@ -116,25 +131,13 @@
                   class="dropdown-menu"
                   aria-labelledby="navbarDropdownMenuLink"
                 >
-                  <% if (title === "Add User") { %>
                   <li>
                     <a class="dropdown-item" href="/users">Users</a>
                   </li>
 
                   <li>
-                    <a class="dropdown-item active" href="/users/add">
-                      Add User
-                    </a>
+                    <a class="dropdown-item" href="/users/add"> Add User </a>
                   </li>
-                  <% } else { %>
-                  <li>
-                    <a class="dropdown-item active" href="/users">Users</a>
-                  </li>
-
-                  <li>
-                    <a class="dropdown-item" href="/users/add">Add User</a>
-                  </li>
-                  <% } %>
                 </ul>
               </li>
 
@@ -168,113 +171,63 @@
           <h2><%= title %></h2>
         </div>
 
-        <div class="row users">
-          <form action="/users/<%= user.id %>" method="POST" class="user">
+        <div class="row movies">
+          <form action="/movies/<%= movie._id %>" method="POST" class="movie">
             <div class="container">
-              <div class="row firstName mb-1">
-                <label class="col-xl-2 col-lg-3 col-md-4" for="firstName">
-                  First Name:
+              <div class="row name mb-1">
+                <label class="col-xl-2 col-lg-3 col-md-4" for="name">
+                  Name:
                 </label>
                 <input
                   type="text"
-                  name="firstName"
-                  id="firstName"
+                  name="name"
+                  id="name"
                   class="col-xl-10 col-lg-9 col-md-8"
-                  value="<%= user.firstName %>"
+                  value="<%= movie.name %>"
                   required
                 />
               </div>
 
-              <div class="row lastName mb-1">
-                <label class="col-xl-2 col-lg-3 col-md-4" for="lastName">
-                  Last Name:
+              <div class="row genres mb-1">
+                <label class="col-xl-2 col-lg-3 col-md-4" for="genres">
+                  Genres (separated by commas):
                 </label>
                 <input
                   type="text"
-                  name="lastName"
-                  id="lastName"
+                  name="genres"
+                  id="genres"
                   class="col-xl-10 col-lg-9 col-md-8"
-                  value="<%= user.lastName %>"
+                  value="<%= movie.genres %>"
                   required
                 />
               </div>
 
-              <div class="row username mb-1">
-                <label class="col-xl-2 col-lg-3 col-md-4" for="username">
-                  Username:
+              <div class="row image mb-1">
+                <label class="col-xl-2 col-lg-3 col-md-4" for="image">
+                  Image (url):
                 </label>
                 <input
-                  type="text"
-                  name="username"
-                  id="username"
+                  type="url"
+                  name="image"
+                  id="image"
                   class="col-xl-10 col-lg-9 col-md-8"
-                  value="<%= user.username %>"
+                  value="<%= movie.image %>"
                   required
                 />
               </div>
 
-              <div class="row sessionTimeOut mb-1">
-                <label class="col-xl-4 col-lg-5 col-md-6" for="sessionTimeOut">
-                  Session Time Out (Minutes):
+              <div class="row premiered mb-1">
+                <label class="col-xl-2 col-lg-3 col-md-4" for="premiered">
+                  Premiered:
                 </label>
                 <input
-                  type="number"
-                  min="0"
-                  name="sessionTimeOut"
-                  id="sessionTimeOut"
-                  class="col-xl-8 col-lg-7 col-md-6"
-                  value="<%= user.sessionTimeOut %>"
-                  required
-                />
-              </div>
-
-              <% if (title !== "Add User") { %>
-
-              <div class="row creation-date mb-1">
-                <label class="col-xl-2 col-lg-3 col-md-4" for="creation-date">
-                  Creation Date:
-                </label>
-                <span
-                  id="creation-date"
+                  type="date"
+                  name="premiered"
+                  id="premiered"
                   class="font-monospace col-xl-10 col-lg-9 col-md-8"
-                >
-                  <big><%= user.creationDate %></big>
-                </span>
-              </div>
-              <% } %>
-
-              <div class="row permissions mb-1">
-                <label class="" for="permissions">Permissions: </label>
-
-                <div class="permissions-checkboxes offset-1">
-                  <% permissions.forEach(function ({ permission, camelCase, on
-                  }, index) { %>
-
-                  <div class="permission">
-                    <% if (on) { %>
-                    <input
-                      type="checkbox"
-                      name="<%= camelCase %>"
-                      id="permission-<%= index %>"
-                      checked
-                      onchange="changeView(this)"
-                    />
-
-                    <% } else { %>
-                    <input
-                      type="checkbox"
-                      name="<%= camelCase %>"
-                      id="permission-<%= index %>"
-                      onchange="changeView(this)"
-                    />
-                    <% } %>
-
-                    <label for="permission-<%= index %>">
-                      <%= permission %>
-                    </label>
-                  </div>
-                  <% }) %>
-                </div>
+                  value="<%= movie.premiered.slice(0, 10) %>"
+                  required
+                />
               </div>
 
               <div class="btns mb-1">
@@ -287,7 +240,7 @@
                 </span>
 
                 <span>
-                  <a class="btn btn-primary" href="/users"> Cancel </a>
+                  <a class="btn btn-primary" href="/movies"> Cancel </a>
                 </span>
               </div>
             </div>

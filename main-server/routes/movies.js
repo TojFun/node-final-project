@@ -21,48 +21,35 @@ router.get("/", async function (req, res, next) {
 
 /* Update Movie */
 
-// // GET specific movie's edit page:
-// router.get("/:id", async (req, res, next) => {
-//   const { error } = req.query;
-//   const { id } = req.params;
+// GET specific movie's edit page:
+router.get("/:id", async (req, res, next) => {
+  // const { error } = req.query;
+  const { id } = req.params;
 
-//   const { user: currentMovie } = req.session;
+  const movie = await moviesBL.get(id);
 
-//   const movie =
-//     id === currentMovie.id ? currentMovie : await moviesBL.getMovie({ _id: id });
+  if (movie == null) return res.redirect("/movies?status=movie-not-found");
 
-// fix this mess
+  res.render("movie", {
+    title: `Update ${movie.name}`,
+    name: req.session.user.firstName,
+    movie,
+  });
+});
 
-//   if (movie == null)
-//     return res.render("error", {
-//       message: `Couldn't find the movie with the id of ${id}`,
-//       error: {},
-//     });
+// POST specific movie's info to the server:
+router.post("/:id", async (req, res, next) => {
+  const { id } = req.params;
+  const { body: movie } = req;
 
-//   const permissions = await moviesBL.getPermissions(movie);
+  try {
+    await moviesBL.update(id, movie);
 
-//   res.render("movie", {
-//     title: `Update ${movie.name}`,
-//     name: currentMovie.firstName,
-//     movie,
-//     permissions,
-//     error,
-//   });
-// });
-
-// // POST specific movie's info to the server:
-// router.post("/:id", async (req, res, next) => {
-//   const { id } = req.params;
-//   const { body: movie } = req;
-
-//   try {
-//     await moviesBL.updateMovie(id, movie);
-
-//     res.redirect("/movies?status=updated");
-//   } catch (error) {
-//     res.render("error", { message: error.message, error });
-//   }
-// });
+    res.redirect("/movies?status=updated");
+  } catch (error) {
+    res.render("error", { message: error.message, error });
+  }
+});
 
 // DELETE a specific movie:
 router.delete("/:id", async (req, res, next) => {

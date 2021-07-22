@@ -1,5 +1,5 @@
 async function deleteThing(id, thing) {
-  if (confirm(`Are you sure you want to delete this ${thing} ?`)) {
+  if (confirm(`Are you sure you want to delete this ${thing}?`)) {
     const { ok, error } = await fetch(`/${thing}s/${id}`, {
       method: "DELETE",
     });

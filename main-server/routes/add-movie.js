@@ -1,34 +1,34 @@
 const express = require("express");
 const router = express.Router();
 
-const usersBL = require("../services/users");
+const moviesBL = require("../services/movies");
 
 router.use((req, res, next) => {
-  if (req.session.user.role !== "admin") return res.redirect("/");
+  if (!req.session.user.permissions.includes("View Movies"))
+    return res.redirect("/?status=no-permission");
+
   next();
 });
 
-// GET the "add user" page:
+// GET the "add movie" page:
 router.get("/", async (req, res, next) => {
   const { error } = req.query;
-  const permissions = await usersBL.getPermissions({ permissions: [] });
 
-  res.render("user", {
-    title: "Add User",
+  res.render("movie", {
+    title: "Add Movie",
     name: req.session.user.firstName,
-    user: { id: "add" },
-    permissions,
+    movie: { _id: "add" },
     error,
   });
 });
 
-// POST new user to the server:
+// POST new movie to the server:
 router.post("/", async (req, res, next) => {
-  const { body: user } = req;
+  const { body: movie } = req;
 
   try {
-    await usersBL.createUser(user);
-    res.redirect("/users?status=added");
+    await moviesBL.create(movie);
+    res.redirect("/movies?status=added");
   } catch (error) {
     res.render("error", { message: error.message, error });
   }
