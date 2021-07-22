@@ -5,6 +5,9 @@ const moviesBL = require("../services/movies");
 
 // GET movies management page:
 router.get("/", async function (req, res, next) {
+  if (!req.session.user.permissions.includes("View Movies"))
+    res.redirect("/?status=no-permission");
+
   const { search } = req.query;
 
   try {
@@ -63,6 +66,9 @@ router.get("/", async function (req, res, next) {
 
 // DELETE a specific movie:
 router.delete("/:id", async (req, res, next) => {
+  if (!req.session.user.permissions.includes("View Movies"))
+    return res.status(401).json({ ok: false, error: "no permission" });
+
   try {
     moviesBL.delete(req.params.id);
 
