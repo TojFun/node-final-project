@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <title>Index</title>
+    <title>Members</title>
 
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
@@ -21,6 +21,7 @@
       crossorigin="anonymous"
     />
 
+    <script src="/javascripts/delete.js" defer></script>
     <link rel="stylesheet" href="/stylesheets/style.css" />
   </head>
 
@@ -46,7 +47,7 @@
               style="width: 100%; font-size: larger"
             >
               <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="/">Menu</a>
+                <a class="nav-link" aria-current="page" href="/">Menu</a>
               </li>
 
               <li class="nav-item dropdown">
@@ -76,7 +77,7 @@
 
               <li class="nav-item dropdown">
                 <a
-                  class="nav-link dropdown-toggle"
+                  class="nav-link dropdown-toggle active"
                   id="navbarDropdownMenuLink"
                   href="#"
                   role="button"
@@ -91,7 +92,9 @@
                   aria-labelledby="navbarDropdownMenuLink"
                 >
                   <li>
-                    <a class="dropdown-item" href="/members">All Members</a>
+                    <a class="dropdown-item active" href="/members">
+                      All Members
+                    </a>
                   </li>
                   <li>
                     <a class="dropdown-item" href="/members/add">Add Member</a>
@@ -140,20 +143,98 @@
       <div class="container-fluid">
         <div class="text-light col-md-3">Hi, <strong><%= name %></strong></div>
       </div>
+
+      <div style="display: flex; justify-content: center">
+        <h1>Movies - Subscriptions Web Site</h1>
+      </div>
     </header>
 
     <main>
-      <div style="display: flex; justify-content: center; margin-top: 2vh">
-        <h1>Movies - Subscriptions Web Site</h1>
-      </div>
+      <div class="container">
+        <div class="row">
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-lg-3">
+                <h2>Members:</h2>
+              </div>
+              <div class="col-lg-9">
+                <div class="container-fluid">
+                  <form
+                    class="row"
+                    action="/members"
+                    method="get"
+                    style="display: flex; justify-content: space-between"
+                  >
+                    <label class="col-3" for="search">Find Member:</label>
+                    <input
+                      class="col-6"
+                      type="text"
+                      name="search"
+                      id="search"
+                    />
 
-      <div
-        class="status-panel"
-        style="display: flex; justify-content: center; margin-top: 10vh"
-      >
-        <% if (status === "no-permission") { %>
-        <h2>Sorry, you don't have the permission of doing that.</h2>
-        <% } %>
+                    <input
+                      class="btn btn-secondary col-2"
+                      type="submit"
+                      value="Find"
+                    />
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row members">
+          <% members.forEach(member => { %>
+          <div class="member col-6 col-lg-4 col-xl-3 col-xxl-2 border">
+            <div class="name">
+              Name: <%= `${member.name}, ${(new
+              Date(member.premiered)).getFullYear()}` %>
+            </div>
+
+            <div class="genres">Genres: <%= member.genres.join(", ") %>.</div>
+
+            <div class="img">
+              <img
+                src="<%= member.image %>"
+                alt="Couldn't load image"
+                width="100%"
+              />
+            </div>
+
+            <div class="subscriptions border">
+              Subscriptions watched:
+              <ul>
+                <% member.subscriptions?.forEach(subscription => { %>
+                <li>
+                  <a href="/members/<%= subscription._id %>"
+                    ><%= subscription.name %></a
+                  >
+                  , <%= new Date(subscription.date).toJSON().slice(0,10) %>
+                </li>
+                <% }) %>
+              </ul>
+            </div>
+
+            <div class="btns">
+              <span>
+                <a class="btn btn-primary" href="members/<%=member._id%>">Edit</a>
+              </span>
+
+              <span>
+                <a
+                  class="btn btn-primary"
+                  href=""
+                  onclick="deleteThing('<%=member._id%>', 'member')"
+                >
+                  Delete
+                </a>
+              </span>
+            </div>
+          </div>
+          <% }) %>
+        </div>
       </div>
     </main>
   </body>

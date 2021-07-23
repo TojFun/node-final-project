@@ -16,7 +16,15 @@ const members = new MongoDB(mongoose, "members", {
 
 const subscriptions = new MongoDB(mongoose, "subscriptions", {
   memberID: { type: String, required: true },
-  movies: { type: Array, required: true },
+  movies: {
+    type: [
+      {
+        _id: { type: mongoose.Types.ObjectId, required: true },
+        date: { type: Date, required: true },
+      },
+    ],
+    required: true,
+  },
 });
 
 module.exports = { movies, members, subscriptions };

@@ -23,22 +23,31 @@ router.get("/", async function (req, res, next) {
 
 // GET specific movie's edit page:
 router.get("/:id", async (req, res, next) => {
-  // const { error } = req.query;
+  if (!req.session.user.permissions.includes("View Movies"))
+    res.redirect("/?status=no-permission");
+
   const { id } = req.params;
 
-  const movie = await moviesBL.get(id);
+  try {
+    const movie = await moviesBL.get(id);
 
-  if (movie == null) return res.redirect("/movies?status=movie-not-found");
+    if (movie == null) return res.redirect("/movies?status=movie-not-found");
 
-  res.render("movie", {
-    title: `Update ${movie.name}`,
-    name: req.session.user.firstName,
-    movie,
-  });
+    res.render("movie", {
+      title: `Update ${movie.name}`,
+      name: req.session.user.firstName,
+      movie,
+    });
+  } catch (error) {
+    res.render("error", { message: error.message, error });
+  }
 });
 
 // POST specific movie's info to the server:
 router.post("/:id", async (req, res, next) => {
+  if (!req.session.user.permissions.includes("Update Movies"))
+    res.redirect("/?status=no-permission");
+
   const { id } = req.params;
   const { body: movie } = req;
 

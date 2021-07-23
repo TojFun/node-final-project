@@ -15,13 +15,17 @@ const loginRouter = require("./routes/login");
 const logoutRouter = require("./routes/logout");
 const createAccountRouter = require("./routes/createAccount");
 
-// User routes:
+// Users routes:
 const usersRouter = require("./routes/users");
 const addUserRouter = require("./routes/add-user");
 
-// Movie routes:
+// Movies routes:
 const moviesRouter = require("./routes/movies");
 const addMovieRouter = require("./routes/add-movie");
+
+// Members routes:
+const membersRouter = require("./routes/members");
+const addMemberRouter = require("./routes/add-member");
 
 // Configs:
 require("dotenv").config();
@@ -61,6 +65,9 @@ app.use("/users", usersRouter);
 
 app.use("/movies/add", addMovieRouter);
 app.use("/movies", moviesRouter);
+
+app.use("/members/add", addMemberRouter);
+app.use("/members", membersRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

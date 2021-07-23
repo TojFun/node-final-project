@@ -1,18 +1,8 @@
 module.exports = (router, db) => {
-  router.get("/", async (req, res) => {
-    try {
-      const data = await db.get({});
-
-      res.status(200).json(data);
-    } catch (error) {
-      res.status(400).send(error);
-    }
-  });
-
   router.get("/:id", async (req, res) => {
     try {
       const { id } = req.params;
-      const data = await db.get({ _id: id });
+      const data = (await db.get({ _id: id }))[0];
 
       res.status(200).json(data);
     } catch (error) {

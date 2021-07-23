@@ -4,7 +4,7 @@ const router = express.Router();
 const moviesBL = require("../services/movies");
 
 router.use((req, res, next) => {
-  if (!req.session.user.permissions.includes("View Movies"))
+  if (!req.session.user.permissions.includes("Create Movies"))
     return res.redirect("/?status=no-permission");
 
   next();
