@@ -20,16 +20,12 @@ async function getUser(condition) {
   if (!((condition.password && condition.username) || condition._id))
     return null;
 
-  const users = await usersDB.get(condition);
+  const user = formatDBUser((await usersDB.get(condition))[0]);
 
-  if (users.length !== 1) return null;
+  const userData = await getUserData(user.id, usersJSON);
+  const { permissions } = await getUserData(user.id, permissionsJSON);
 
-  const userDB = formatDBUser(users[0]);
-
-  const userData = await getUserData(userDB.id, usersJSON);
-  const { permissions } = await getUserData(userDB.id, permissionsJSON);
-
-  return Object.assign(userDB, userData, { permissions });
+  return Object.assign(user, userData, { permissions });
 }
 
 async function getAllUsers() {
@@ -146,11 +142,10 @@ async function deleteJSONUser(id, jsonfile) {
 }
 // nothing works without it
 function formatDBUser(dbUser) {
-  const userFromDB = dbUser._doc;
-  userFromDB.id = userFromDB._id.toString();
-  delete userFromDB._id;
+  dbUser.id = dbUser._id.toString();
+  delete dbUser._id;
 
-  return userFromDB;
+  return dbUser;
 } // although there must be better way using native mongoose.
 
 module.exports = {

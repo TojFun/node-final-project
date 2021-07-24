@@ -21,6 +21,12 @@
       crossorigin="anonymous"
     />
 
+    <script defer>
+      function preview({ value }) {
+        document.querySelector(".image-preview").src = value;
+      }
+    </script>
+
     <script src="/javascripts/permissions.js" defer></script>
     <link rel="stylesheet" href="/stylesheets/style.css" />
   </head>
@@ -160,7 +166,7 @@
         </div>
       </div>
 
-      <div style="display: flex; justify-content: center">
+      <div class="center" >
         <h1>Movies - Subscriptions Web Site</h1>
       </div>
     </header>
@@ -203,16 +209,25 @@
               </div>
 
               <div class="row image mb-1">
-                <label class="col-xl-2 col-lg-3 col-md-4" for="image">
+                <label class="col-xl-2 col-lg-3 col-4" for="image">
                   Image (url):
                 </label>
+
                 <input
                   type="url"
                   name="image"
                   id="image"
-                  class="col-xl-10 col-lg-9 col-md-8"
+                  class="col-xl-8 col-lg-7 col-6"
                   value="<%= movie.image %>"
+                  onchange="preview(this)"
                   required
+                />
+
+                <img
+                  class="col-2 image-preview"
+                  src="<%= movie.image %>"
+                  alt="Couldn't View The Image"
+                  style="max-width: 20vh"
                 />
               </div>
 
@@ -240,7 +255,7 @@
                 </span>
 
                 <span>
-                  <a class="btn btn-primary" href="/movies"> Cancel </a>
+                  <a class="btn btn-primary" href="/movies">Cancel</a>
                 </span>
               </div>
             </div>

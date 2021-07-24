@@ -5,8 +5,8 @@ const membersBL = require("../services/members.js");
 
 // GET members management page:
 router.get("/", async function (req, res, next) {
-  if (!req.session.user.permissions.includes("View Members"))
-    res.redirect("/?status=no-permission");
+  if (!req.session.user.permissions.includes("View Subscriptions"))
+    return res.redirect("/?status=no-permission");
 
   const { search } = req.query;
 
@@ -24,7 +24,7 @@ router.get("/", async function (req, res, next) {
 // // GET specific member's edit page:
 // router.get("/:id", async (req, res, next) => {
 //   if (!req.session.user.permissions.includes("View Members"))
-//     res.redirect("/?status=no-permission");
+//     return res.redirect("/?status=no-permission");
 
 //   const { id } = req.params;
 
@@ -46,7 +46,7 @@ router.get("/", async function (req, res, next) {
 // // POST specific member's info to the server:
 // router.post("/:id", async (req, res, next) => {
 //   if (!req.session.user.permissions.includes("Update Members"))
-//     res.redirect("/?status=no-permission");
+//     return res.redirect("/?status=no-permission");
 
 //   const { id } = req.params;
 //   const { body: member } = req;
@@ -60,18 +60,19 @@ router.get("/", async function (req, res, next) {
 //   }
 // });
 
-// // DELETE a specific member:
-// router.delete("/:id", async (req, res, next) => {
-//   if (!req.session.user.permissions.includes("View Members"))
-//     return res.status(401).json({ ok: false, error: "no permission" });
+// DELETE a specific member:
+router.delete("/:id", async (req, res, next) => {
+  if (!req.session.user.permissions.includes("View Subscriptions"))
+    return res.status(401).json({ ok: false, error: "no permission" });
 
-//   try {
-//     membersBL.delete(req.params.id);
+  try {
+    await membersBL.delete(req.params.id);
 
-//     return res.status(200).json({ ok: true, error: null });
-//   } catch (error) {
-//     return res.status(400).json({ ok: false, error });
-//   }
-// });
+    return res.status(200).json({ ok: true, error: null });
+  } catch (error) {
+    console.error(error.message);
+    return res.status(400).json({ ok: false, error });
+  }
+});
 
 module.exports = router;

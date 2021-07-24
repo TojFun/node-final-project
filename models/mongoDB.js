@@ -7,7 +7,10 @@ class MongoDB {
     );
   }
 
-  get = (conditions = {}) => this.MongoDBModel.find(conditions).exec();
+  get = (conditions = {}) =>
+    this.MongoDBModel.find(conditions)
+      .exec()
+      .then((data) => data.map((movie) => movie._doc));
 
   post = (obj) => this.MongoDBModel.create(obj);
 

@@ -5,8 +5,8 @@ async function deleteThing(id, thing) {
     });
 
     if (ok) {
-      location.reload();
       alert(`this ${thing} has been deleted.`);
+      location.reload();
     } else
       alert(
         `Couldn't delete this ${thing}.

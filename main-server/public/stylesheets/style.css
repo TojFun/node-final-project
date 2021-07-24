@@ -17,6 +17,11 @@ a {
   color: #00b7ff;
 }
 
+.center {
+  display: flex;
+  justify-content: center;
+}
+
 form label {
   font-size: 1.2em;
 }

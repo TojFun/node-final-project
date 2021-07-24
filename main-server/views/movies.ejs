@@ -144,7 +144,7 @@
         <div class="text-light col-md-3">Hi, <strong><%= name %></strong></div>
       </div>
 
-      <div style="display: flex; justify-content: center">
+      <div class="center">
         <h1>Movies - Subscriptions Web Site</h1>
       </div>
     </header>
@@ -172,6 +172,7 @@
                       type="text"
                       name="search"
                       id="search"
+                      value="<%= search %>"
                     />
 
                     <input
@@ -209,10 +210,10 @@
               <ul>
                 <% movie.subscriptions?.forEach(subscription => { %>
                 <li>
-                  <a href="/members/<%= subscription._id %>"
+                  <a href="/members/<%= subscription.memberID %>"
                     ><%= subscription.name %></a
                   >
-                  , <%= new Date(subscription.date).toJSON().slice(0,10) %>
+                  , <%= new Date(subscription.watchDate).toJSON().slice(0,10) %>
                 </li>
                 <% }) %>
               </ul>

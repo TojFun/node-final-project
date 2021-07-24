@@ -144,7 +144,7 @@
         <div class="text-light col-md-3">Hi, <strong><%= name %></strong></div>
       </div>
 
-      <div style="display: flex; justify-content: center">
+      <div class="center">
         <h1>Movies - Subscriptions Web Site</h1>
       </div>
     </header>
@@ -154,83 +154,79 @@
         <div class="row">
           <div class="container-fluid">
             <div class="row">
-              <div class="col-lg-3">
-                <h2>Members:</h2>
-              </div>
-              <div class="col-lg-9">
-                <div class="container-fluid">
-                  <form
-                    class="row"
-                    action="/members"
-                    method="get"
-                    style="display: flex; justify-content: space-between"
-                  >
-                    <label class="col-3" for="search">Find Member:</label>
-                    <input
-                      class="col-6"
-                      type="text"
-                      name="search"
-                      id="search"
-                    />
-
-                    <input
-                      class="btn btn-secondary col-2"
-                      type="submit"
-                      value="Find"
-                    />
-                  </form>
-                </div>
-              </div>
+              <h2>Members:</h2>
             </div>
           </div>
         </div>
 
         <div class="row members">
           <% members.forEach(member => { %>
-          <div class="member col-6 col-lg-4 col-xl-3 col-xxl-2 border">
-            <div class="name">
-              Name: <%= `${member.name}, ${(new
-              Date(member.premiered)).getFullYear()}` %>
-            </div>
+          <div class="member col-12 col-lg-6 col-xl-4 border">
+            <div class="container-fluid">
+              <div class="row mb-2 name"><%= member.name %></div>
 
-            <div class="genres">Genres: <%= member.genres.join(", ") %>.</div>
+              <div class="row mb-2 email">Email: <%= member.email %></div>
 
-            <div class="img">
-              <img
-                src="<%= member.image %>"
-                alt="Couldn't load image"
-                width="100%"
-              />
-            </div>
+              <div class="row mb-2 city">City: <%= member.city %></div>
 
-            <div class="subscriptions border">
-              Subscriptions watched:
-              <ul>
-                <% member.subscriptions?.forEach(subscription => { %>
-                <li>
-                  <a href="/members/<%= subscription._id %>"
-                    ><%= subscription.name %></a
+              <div class="row mb-2 btns">
+                <span class="col">
+                  <a class="btn btn-primary" href="members/<%=member._id%>">
+                    Edit
+                  </a>
+                </span>
+
+                <span class="col">
+                  <a
+                    class="btn btn-primary"
+                    href=""
+                    onclick="deleteThing('<%=member._id%>', 'member')"
                   >
-                  , <%= new Date(subscription.date).toJSON().slice(0,10) %>
-                </li>
-                <% }) %>
-              </ul>
-            </div>
+                    Delete
+                  </a>
+                </span>
+              </div>
 
-            <div class="btns">
-              <span>
-                <a class="btn btn-primary" href="members/<%=member._id%>">Edit</a>
-              </span>
+              <div class="mb-1 subscriptions">
+                <div class="row">Movie Watched:</div>
 
-              <span>
-                <a
-                  class="btn btn-primary"
-                  href=""
-                  onclick="deleteThing('<%=member._id%>', 'member')"
-                >
-                  Delete
-                </a>
-              </span>
+                <div class="center">
+                  <button class="btn btn-secondary" style="font-size: smaller">
+                    Subscribe to a New Movie
+                  </button>
+                </div>
+
+                <div class="center">
+                  <div
+                    class="subscribe row border container-fluid"
+                    style="font-size: smaller"
+                  >
+                    <div class="row">Subscribe to a New Movie</div>
+
+                    <div class="row">
+                      <select name="movie" id="movie"></select>
+                    </div>
+                    <div class="row">
+                      <input type="date" name="watchDate" id="watchDate" />
+                    </div>
+
+                    <div class="row">
+                      <button class="btn btn-primary">Subscribe</button>
+                    </div>
+                  </div>
+                </div>
+
+                <ul>
+                  <% member?.subscriptions?.movies.forEach(movie => { %>
+                  <li>
+                    <a href="/movies?search=<%= movie.name %>"
+                      ><%= movie.name %></a
+                    >
+                    , <%= new Date(movie.date).toJSON().slice(0,10) %>
+                  </li>
+                  <% }) %>
+                </ul>
+              </div>
             </div>
           </div>
           <% }) %>

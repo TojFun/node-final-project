@@ -6,14 +6,14 @@ const moviesBL = require("../services/movies");
 // GET movies management page:
 router.get("/", async function (req, res, next) {
   if (!req.session.user.permissions.includes("View Movies"))
-    res.redirect("/?status=no-permission");
+    return res.redirect("/?status=no-permission");
 
   const { search } = req.query;
 
   try {
     const movies = await moviesBL.getAll(search);
 
-    res.render("movies", { movies, name: req.session.user.firstName });
+    res.render("movies", { movies, search, name: req.session.user.firstName });
   } catch (error) {
     res.render("error", { message: "Couldn't connect to ws", error });
   }
@@ -24,7 +24,7 @@ router.get("/", async function (req, res, next) {
 // GET specific movie's edit page:
 router.get("/:id", async (req, res, next) => {
   if (!req.session.user.permissions.includes("View Movies"))
-    res.redirect("/?status=no-permission");
+    return res.redirect("/?status=no-permission");
 
   const { id } = req.params;
 
@@ -46,7 +46,7 @@ router.get("/:id", async (req, res, next) => {
 // POST specific movie's info to the server:
 router.post("/:id", async (req, res, next) => {
   if (!req.session.user.permissions.includes("Update Movies"))
-    res.redirect("/?status=no-permission");
+    return res.redirect("/?status=no-permission");
 
   const { id } = req.params;
   const { body: movie } = req;
@@ -66,7 +66,7 @@ router.delete("/:id", async (req, res, next) => {
     return res.status(401).json({ ok: false, error: "no permission" });
 
   try {
-    moviesBL.delete(req.params.id);
+    await moviesBL.delete(req.params.id);
 
     return res.status(200).json({ ok: true, error: null });
   } catch (error) {
