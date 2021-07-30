@@ -19,7 +19,7 @@ class MongoDB {
 
     const newObject = whatToDo(data);
 
-    await this.MongoDBModel.findByIdAndUpdate(id, newObject).exec();
+    await this.MongoDBModel.findByIdAndUpdate(id, { $set: newObject }).exec();
 
     return newObject;
   };

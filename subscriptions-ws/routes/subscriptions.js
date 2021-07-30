@@ -36,9 +36,7 @@ router.post("/", async (req, res) => {
 router.put("/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const status = await subscriptions.put(id, (data) => {
-      return { ...data, ...req.body };
-    });
+    const status = await subscriptions.put(id, () => req.body);
 
     res.status(200).json(status);
   } catch (error) {

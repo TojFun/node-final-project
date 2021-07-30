@@ -27,6 +27,8 @@ const addMovieRouter = require("./routes/add-movie");
 const membersRouter = require("./routes/members");
 // const addMemberRouter = require("./routes/add-member");
 
+const subscriptionsRouter = require("./routes/subscriptions");
+
 // Configs:
 require("dotenv").config();
 
@@ -68,6 +70,8 @@ app.use("/movies", moviesRouter);
 
 // app.use("/members/add", addMemberRouter);
 app.use("/members", membersRouter);
+
+app.use("/subscriptions", subscriptionsRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

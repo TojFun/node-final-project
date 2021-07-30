@@ -70,7 +70,6 @@ router.delete("/:id", async (req, res, next) => {
 
     return res.status(200).json({ ok: true, error: null });
   } catch (error) {
-    console.error(error.message);
     return res.status(400).json({ ok: false, error });
   }
 });

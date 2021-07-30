@@ -21,7 +21,9 @@
       crossorigin="anonymous"
     />
 
+    <script src="/javascripts/subscription.js" defer></script>
     <script src="/javascripts/delete.js" defer></script>
+
     <link rel="stylesheet" href="/stylesheets/style.css" />
   </head>
 
@@ -161,7 +163,9 @@
 
         <div class="row members">
           <% members.forEach(member => { %>
-          <div class="member col-12 col-lg-6 col-xl-4 border">
+          <div
+            class="member col-12 col-lg-6 col-xl-4 border id<%= member._id %>"
+          >
             <div class="container-fluid">
               <div class="row mb-2 name"><%= member.name %></div>
 
@@ -191,27 +195,49 @@
                 <div class="row">Movie Watched:</div>
 
                 <div class="center">
-                  <button class="btn btn-secondary" style="font-size: smaller">
+                  <button
+                    class="btn btn-secondary"
+                    style="font-size: smaller"
+                    onclick="subscriptionsButtonClick('<%=member._id%>')"
+                  >
                     Subscribe to a New Movie
                   </button>
                 </div>
 
                 <div class="center">
                   <div
-                    class="subscribe row border container-fluid"
+                    id="<%=`subscriptionPanel${member._id}`%>"
+                    class="subscribe row border container-fluid hide"
                     style="font-size: smaller"
                   >
                     <div class="row">Subscribe to a New Movie</div>
 
                     <div class="row">
-                      <select name="movie" id="movie"></select>
-                    </div>
-                    <div class="row">
-                      <input type="date" name="watchDate" id="watchDate" />
+                      <select name="movie" class="movie">
+                        <% member.unwatchedMovies.forEach(unwatchedMovie => { %>
+                        <option value="<%= unwatchedMovie._id %>">
+                          <%= unwatchedMovie.name %>
+                        </option>
+                        <% }) %>
+                      </select>
                     </div>
 
                     <div class="row">
-                      <button class="btn btn-primary">Subscribe</button>
+                      <input
+                        type="date"
+                        name="watchDate"
+                        class="watchDate"
+                        value="<%= new Date().toJSON().slice(0,10)%>"
+                      />
+                    </div>
+
+                    <div class="row">
+                      <button
+                        onclick="subscribe('<%=member.subscriptions._id%>','<%=member._id%>')"
+                        class="btn btn-primary"
+                      >
+                        Subscribe
+                      </button>
                     </div>
                   </div>
                 </div>

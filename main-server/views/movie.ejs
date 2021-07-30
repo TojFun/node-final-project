@@ -166,7 +166,7 @@
         </div>
       </div>
 
-      <div class="center" >
+      <div class="center">
         <h1>Movies - Subscriptions Web Site</h1>
       </div>
     </header>
@@ -181,35 +181,38 @@
           <form action="/movies/<%= movie._id %>" method="POST" class="movie">
             <div class="container">
               <div class="row name mb-1">
-                <label class="col-xl-2 col-lg-3 col-md-4" for="name">
+                <label class="col-xl-2 col-lg-3 col-md-4 form-label" for="name">
                   Name:
                 </label>
                 <input
                   type="text"
                   name="name"
                   id="name"
-                  class="col-xl-10 col-lg-9 col-md-8"
+                  class="col-xl-10 col-lg-9 col-md-8 form-text"
                   value="<%= movie.name %>"
                   required
                 />
               </div>
 
               <div class="row genres mb-1">
-                <label class="col-xl-2 col-lg-3 col-md-4" for="genres">
+                <label
+                  class="col-xl-2 col-lg-3 col-md-4 form-label"
+                  for="genres"
+                >
                   Genres (separated by commas):
                 </label>
                 <input
                   type="text"
                   name="genres"
                   id="genres"
-                  class="col-xl-10 col-lg-9 col-md-8"
+                  class="col-xl-10 col-lg-9 col-md-8 form-text"
                   value="<%= movie.genres %>"
                   required
                 />
               </div>
 
               <div class="row image mb-1">
-                <label class="col-xl-2 col-lg-3 col-4" for="image">
+                <label class="col-xl-2 col-lg-3 col-4 form-label" for="image">
                   Image (url):
                 </label>
 
@@ -217,7 +220,7 @@
                   type="url"
                   name="image"
                   id="image"
-                  class="col-xl-8 col-lg-7 col-6"
+                  class="col-xl-8 col-lg-7 col-6 form-text"
                   value="<%= movie.image %>"
                   onchange="preview(this)"
                   required
@@ -232,7 +235,10 @@
               </div>
 
               <div class="row premiered mb-1">
-                <label class="col-xl-2 col-lg-3 col-md-4" for="premiered">
+                <label
+                  class="col-xl-2 col-lg-3 col-md-4 form-label"
+                  for="premiered"
+                >
                   Premiered:
                 </label>
                 <input
