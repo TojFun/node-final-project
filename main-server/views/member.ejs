@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <title>Movies</title>
+    <title><%= title %></title>
 
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
@@ -21,7 +21,13 @@
       crossorigin="anonymous"
     />
 
-    <script src="/javascripts/delete.js" defer></script>
+    <script defer>
+      function preview({ value }) {
+        document.querySelector(".image-preview").src = value;
+      }
+    </script>
+
+    <script src="/javascripts/permissions.js" defer></script>
     <link rel="stylesheet" href="/stylesheets/style.css" />
   </head>
 
@@ -52,7 +58,7 @@
 
               <li class="nav-item dropdown">
                 <a
-                  class="nav-link dropdown-toggle active"
+                  class="nav-link dropdown-toggle"
                   id="navbarDropdownMenuLink"
                   href="#"
                   role="button"
@@ -67,19 +73,20 @@
                   aria-labelledby="navbarDropdownMenuLink"
                 >
                   <li>
-                    <a class="dropdown-item active" href="/movies">
-                      All Movies
-                    </a>
+                    <a class="dropdown-item" href="/movies">All Movies</a>
                   </li>
+
                   <li>
-                    <a class="dropdown-item" href="/movies/add">Add Movie</a>
+                    <a class="dropdown-item active" href="/movies/add">
+                      Add Movie
+                    </a>
                   </li>
                 </ul>
               </li>
 
               <li class="nav-item dropdown">
                 <a
-                  class="nav-link dropdown-toggle"
+                  class="nav-link dropdown-toggle active"
                   id="navbarDropdownMenuLink"
                   href="#"
                   role="button"
@@ -93,12 +100,27 @@
                   class="dropdown-menu"
                   aria-labelledby="navbarDropdownMenuLink"
                 >
+                  <% if (title === "Add Member") { %>
                   <li>
                     <a class="dropdown-item" href="/members">All Members</a>
+                  </li>
+
+                  <li>
+                    <a class="dropdown-item active" href="/members/add"
+                      >Add Member</a
+                    >
+                  </li>
+
+                  <% } else { %>
+                  <li>
+                    <a class="dropdown-item active" href="/members">
+                      All Members
+                    </a>
                   </li>
                   <li>
                     <a class="dropdown-item" href="/members/add">Add Member</a>
                   </li>
+                  <% } %>
                 </ul>
               </li>
 
@@ -121,8 +143,9 @@
                   <li>
                     <a class="dropdown-item" href="/users">Users</a>
                   </li>
+
                   <li>
-                    <a class="dropdown-item" href="/users/add">Add User</a>
+                    <a class="dropdown-item" href="/users/add"> Add User </a>
                   </li>
                 </ul>
               </li>
@@ -141,7 +164,9 @@
       </nav>
 
       <div class="container-fluid">
-        <div class="text-light col-md-3">Hi, <strong><%= name %></strong></div>
+        <div class="text-light col-md-3">
+          Hi, <strong> <%= name %> </strong>
+        </div>
       </div>
 
       <div class="center">
@@ -152,93 +177,73 @@
     <main>
       <div class="container">
         <div class="row">
-          <div class="container-fluid">
-            <div class="row">
-              <div class="col-lg-3">
-                <h2>Movies:</h2>
-              </div>
-
-              <div class="col-lg-9">
-                <div class="container-fluid">
-                  <form
-                    class="row"
-                    action="/movies"
-                    method="get"
-                    style="display: flex; justify-content: space-between"
-                  >
-                    <label class="col-3" for="search">Find Movie:</label>
-                    <input
-                      class="col-6"
-                      type="text"
-                      name="search"
-                      id="search"
-                      value="<%= search %>"
-                    />
-
-                    <input
-                      class="btn btn-secondary col-2"
-                      type="submit"
-                      value="Find"
-                    />
-                  </form>
-                </div>
-              </div>
-            </div>
-          </div>
+          <h2><%= title %></h2>
         </div>
 
-        <div class="row movies">
-          <% movies.forEach(movie => { %>
-          <div class="movie col-6 col-lg-4 col-xl-3 col-xxl-2 border">
-            <div class="name">
-              Name: <%= `${movie.name}, ${(new
-              Date(movie.premiered)).getFullYear()}` %>
+        <div class="row members">
+          <form
+            action="/members/<%= member._id %>"
+            method="POST"
+            class="member"
+          >
+            <div class="container">
+              <div class="row name mb-2">
+                <label class="col-xl-2 col-lg-3 col-md-4" for="name">
+                  Name:
+                </label>
+                <input
+                  type="text"
+                  name="name"
+                  id="name"
+                  class="col-xl-10 col-lg-9 col-md-8"
+                  value="<%= member.name %>"
+                  required
+                />
+              </div>
+
+              <div class="row email mb-2">
+                <label class="col-xl-2 col-lg-3 col-md-4" for="email">
+                  Email:
+                </label>
+                <input
+                  type="email"
+                  name="email"
+                  id="email"
+                  class="col-xl-10 col-lg-9 col-md-8"
+                  value="<%= member.email %>"
+                  required
+                />
+              </div>
+
+              <div class="row city mb-2">
+                <label class="col-xl-2 col-lg-3 col-md-4" for="city">
+                  City:
+                </label>
+                <input
+                  type="text"
+                  name="city"
+                  id="city"
+                  class="col-xl-10 col-lg-9 col-md-8"
+                  value="<%= member.city %>"
+                  required
+                />
+              </div>
+
+              <div class="btns">
+                <span>
+                  <input
+                    class="btn btn-primary"
+                    type="submit"
+                    value="<%= title %>"
+                  />
+                </span>
+
+                <span>
+                  <a class="btn btn-primary" href="/members">Cancel</a>
+                </span>
+              </div>
             </div>
-
-            <div class="genres">Genres: <%= movie.genres.join(", ") %>.</div>
-
-            <div class="img">
-              <img
-                src="<%= movie.image %>"
-                alt="Couldn't load image"
-                width="100%"
-              />
-            </div>
-
-            <% if (movie?.subscriptions?.length > 0) { %>
-
-            <div class="subscriptions border">
-              Subscriptions watched:
-              <ul>
-                <% movie.subscriptions.forEach(subscription => { %>
-                <li>
-                  <a href="/members/<%= subscription.memberID %>">
-                    <%= subscription.name %>
-                  </a>
-                  , <%= new Date(subscription.watchDate).toJSON().slice(0,10) %>
-                </li>
-                <% }) %>
-              </ul>
-            </div>
-            <% } %>
-
-            <div class="btns">
-              <span>
-                <a class="btn btn-primary" href="movies/<%=movie._id%>">Edit</a>
-              </span>
-
-              <span>
-                <a
-                  class="btn btn-primary"
-                  href=""
-                  onclick="deleteThing('<%=movie._id%>', 'movie')"
-                >
-                  Delete
-                </a>
-              </span>
-            </div>
-          </div>
-          <% }) %>
+          </form>
         </div>
       </div>
     </main>

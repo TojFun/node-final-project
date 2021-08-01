@@ -248,7 +248,7 @@
                     <a href="/movies?search=<%= movie.name %>"
                       ><%= movie.name %></a
                     >
-                    , <%= new Date(movie.date).toJSON().slice(0,10) %>
+                    , <%= new Date(movie.watchDate).toJSON().slice(0,10) %>
                   </li>
                   <% }) %>
                 </ul>

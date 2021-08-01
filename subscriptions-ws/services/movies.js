@@ -12,7 +12,7 @@ exports.getAll = async () => {
   for (const subscription of subscriptions) {
     for (const subscriptionMovie of subscription.movies) {
       const index = movies.findIndex(
-        (movie) => movie._id == subscriptionMovie._id.toString()
+        (movie) => movie._id.toString() === subscriptionMovie.movieID.toString()
       );
 
       const member = {
@@ -20,7 +20,7 @@ exports.getAll = async () => {
         name: members.find(
           ({ _id }) => _id.toString() === subscription.memberID
         ).name,
-        watchDate: subscriptionMovie.date,
+        watchDate: subscriptionMovie.watchDate,
       };
 
       movies[index].subscriptions =

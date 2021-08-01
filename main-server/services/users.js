@@ -6,6 +6,8 @@ const {
   permissionsAvailable: permissionsAvailableJSON,
 } = require("../models/jsonInterfaces");
 
+const placeHolderPassword = "no-password-has-been-provided";
+
 // get all permissions available:
 let permissionsAvailable;
 
@@ -17,13 +19,20 @@ let permissionsAvailable;
 
 // Main Functions:
 async function getUser(condition) {
-  if (!((condition.password && condition.username) || condition._id))
+  if (
+    !((condition.password && condition.username) || condition._id) ||
+    condition.password === placeHolderPassword
+  )
     return null;
 
-  const user = formatDBUser((await usersDB.get(condition))[0]);
+  const users = await usersDB.get(condition);
 
-  const userData = await getUserData(user.id, usersJSON);
-  const { permissions } = await getUserData(user.id, permissionsJSON);
+  if (users.length < 1) return null;
+
+  const [user] = users;
+
+  const userData = await getUserData(user._id, usersJSON);
+  const { permissions } = await getUserData(user._id, permissionsJSON);
 
   return Object.assign(user, userData, { permissions });
 }
@@ -34,12 +43,10 @@ async function getAllUsers() {
   const { users: permissions } = await permissionsJSON.get();
 
   const allUsers = dbUsers.map((dbUser) => {
-    dbUser = formatDBUser(dbUser);
-
     return Object.assign(
       dbUser,
-      users.find((user) => user.id == dbUser.id),
-      permissions.find((permission) => permission.id == dbUser.id)
+      users.find((user) => user.id == dbUser._id),
+      permissions.find((permission) => permission.id == dbUser._id)
     );
   });
 
@@ -74,9 +81,15 @@ async function updateUser(id, newUser) {
 async function createUser(newUser) {
   const { firstName, lastName, username, sessionTimeOut } = newUser;
 
+  if ((await usersDB.get({ username })).length > 0)
+    return { status: "username-taken", ok: false };
+
   const permissions = getNewUserPermissions(newUser);
 
-  const { id } = await usersDB.post({ username, password: "NONE" });
+  const { id } = await usersDB.post({
+    username,
+    password: placeHolderPassword,
+  });
 
   await createJSONUser(usersJSON, {
     id,
@@ -88,6 +101,8 @@ async function createUser(newUser) {
   });
 
   await createJSONUser(permissionsJSON, { id, permissions });
+
+  return { ok: true, status: "added" };
 }
 
 async function deleteUser(id) {
@@ -99,7 +114,7 @@ async function deleteUser(id) {
 // Utils Functions:
 async function getUserData(id, jsonfile) {
   const { users } = await jsonfile.get();
-  return users.find((user) => user.id === id);
+  return users.find((user) => user.id === id.toString());
 }
 
 function getNewUserPermissions(newUser) {
@@ -140,13 +155,24 @@ async function deleteJSONUser(id, jsonfile) {
     return { users };
   });
 }
-// nothing works without it
-function formatDBUser(dbUser) {
-  dbUser.id = dbUser._id.toString();
-  delete dbUser._id;
 
-  return dbUser;
-} // although there must be better way using native mongoose.
+async function createPassword({ username, password }) {
+  if (password === placeHolderPassword)
+    return { ok: false, status: "cant-have-password" };
+
+  const users = await usersDB.get({ username });
+
+  if (users.length < 1) return { ok: false, status: "could-not-find-user" };
+
+  const [{ _id, password: currentPassword }] = users;
+
+  if (currentPassword !== placeHolderPassword)
+    return { ok: false, status: "user-already-have-password" };
+
+  await usersDB.put(_id, () => password);
+
+  return { ok: true, status: "noted" };
+}
 
 module.exports = {
   getUser,
@@ -155,4 +181,5 @@ module.exports = {
   createUser,
   deleteUser,
   getPermissions,
+  createPassword,
 };

@@ -25,7 +25,7 @@ const addMovieRouter = require("./routes/add-movie");
 
 // Members routes:
 const membersRouter = require("./routes/members");
-// const addMemberRouter = require("./routes/add-member");
+const addMemberRouter = require("./routes/add-member");
 
 const subscriptionsRouter = require("./routes/subscriptions");
 
@@ -68,7 +68,7 @@ app.use("/users", usersRouter);
 app.use("/movies/add", addMovieRouter);
 app.use("/movies", moviesRouter);
 
-// app.use("/members/add", addMemberRouter);
+app.use("/members/add", addMemberRouter);
 app.use("/members", membersRouter);
 
 app.use("/subscriptions", subscriptionsRouter);

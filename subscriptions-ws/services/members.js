@@ -19,7 +19,7 @@ exports.getAll = async () => {
         subscription.movies.map(async (movie) => {
           return {
             ...movie._doc,
-            name: (await moviesDB.get({ _id: movie._id }))[0].name,
+            name: (await moviesDB.get({ _id: movie.movieID }))[0]?.name,
           };
         })
       ),
@@ -27,4 +27,10 @@ exports.getAll = async () => {
   }
 
   return members;
+};
+
+exports.create = async (member) => {
+  const { _id } = await membersDB.post(member);
+
+  await subscriptionsDB.post({ memberID: _id, movies: [] });
 };

@@ -27,8 +27,9 @@ router.post("/", async (req, res, next) => {
   const { body: user } = req;
 
   try {
-    await usersBL.createUser(user);
-    res.redirect("/users?status=added");
+    const { status } = await usersBL.createUser(user);
+
+    res.redirect(`/users?status=${status}`);
   } catch (error) {
     res.render("error", { message: error.message, error });
   }

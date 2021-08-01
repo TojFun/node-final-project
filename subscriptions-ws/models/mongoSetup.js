@@ -19,8 +19,8 @@ const subscriptions = new MongoDB(mongoose, "subscriptions", {
   movies: {
     type: [
       {
-        _id: { type: mongoose.Types.ObjectId, required: true },
-        date: { type: Date, required: true },
+        movieID: { type: mongoose.Types.ObjectId, required: true },
+        watchDate: { type: Date, required: true },
       },
     ],
     required: true,

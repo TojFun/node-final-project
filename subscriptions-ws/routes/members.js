@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const { members } = require("../models/mongoSetup");
-const { getAll } = require("../services/members");
+const { getAll, create } = require("../services/members");
 
 router.get("/", async (req, res) => {
   try {
@@ -8,14 +8,14 @@ router.get("/", async (req, res) => {
 
     res.status(200).json(data);
   } catch (error) {
-    res.status(400).send(error);
+    res.status(400).json({ error: error.message });
   }
 });
 
 router.get("/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const data = (await members.get({ _id: id }))[0];
+    const [data] = await members.get({ _id: id });
 
     res.status(200).json(data);
   } catch (error) {
@@ -25,7 +25,7 @@ router.get("/:id", async (req, res) => {
 
 router.post("/", async (req, res) => {
   try {
-    const status = await members.post(req.body);
+    const status = await create(req.body);
 
     return res.status(201).json(status);
   } catch (error) {

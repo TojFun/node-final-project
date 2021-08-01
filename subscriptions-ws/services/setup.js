@@ -14,29 +14,37 @@ async function setupDB(db, objects, getNewObject) {
 }
 
 module.exports = async () => {
-  const movies = await moviesAPI.getAll();
-  const members = await membersAPI.getAll();
+  console.log("Setting Up");
 
-  for (const {
-    name,
-    genres,
-    image: { original: image },
-    premiered,
-  } of movies) {
-    await moviesDB.post({
+  try {
+    const movies = await moviesAPI.getAll();
+    const members = await membersAPI.getAll();
+
+    for (const {
       name,
       genres,
-      image,
-      premiered: new Date(premiered),
-    });
+      image: { medium: image },
+      premiered,
+    } of movies) {
+      await moviesDB.post({
+        name,
+        genres,
+        image,
+        premiered: new Date(premiered),
+      });
+    }
+
+    for (const {
+      name,
+      email,
+      address: { city },
+    } of members) {
+      const { _id: memberID } = await membersDB.post({ name, email, city });
+      await subscriptionsDB.post({ memberID, movies: [] });
+    }
+  } catch (error) {
+    return console.error("Error: " + error.message);
   }
 
-  for (const {
-    name,
-    email,
-    address: { city },
-  } of members) {
-    const { _id: memberID } = await membersDB.post({ name, email, city });
-    await subscriptionsDB.post({ memberID, movies: [] });
-  }
+  console.log("Done");
 };

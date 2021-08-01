@@ -19,46 +19,46 @@ router.get("/", async function (req, res, next) {
   }
 });
 
-// /* Update Member */
+/* Update Member */
 
-// // GET specific member's edit page:
-// router.get("/:id", async (req, res, next) => {
-//   if (!req.session.user.permissions.includes("View Members"))
-//     return res.redirect("/?status=no-permission");
+// GET specific member's edit page:
+router.get("/:id", async (req, res, next) => {
+  if (!req.session.user.permissions.includes("View Subscriptions"))
+    return res.redirect("/?status=no-permission");
 
-//   const { id } = req.params;
+  const { id } = req.params;
 
-//   try {
-//     const member = await membersBL.get(id);
+  try {
+    const member = await membersBL.get(id);
 
-//     if (member == null) return res.redirect("/members?status=member-not-found");
+    if (member == null) return res.redirect("/members?status=member-not-found");
 
-//     res.render("member", {
-//       title: `Update ${member.name}`,
-//       name: req.session.user.firstName,
-//       member,
-//     });
-//   } catch (error) {
-//     res.render("error", { message: error.message, error });
-//   }
-// });
+    res.render("member", {
+      title: `Update ${member.name}`,
+      name: req.session.user.firstName,
+      member,
+    });
+  } catch (error) {
+    res.render("error", { message: error.message, error });
+  }
+});
 
-// // POST specific member's info to the server:
-// router.post("/:id", async (req, res, next) => {
-//   if (!req.session.user.permissions.includes("Update Members"))
-//     return res.redirect("/?status=no-permission");
+// POST specific member's info to the server:
+router.post("/:id", async (req, res, next) => {
+  if (!req.session.user.permissions.includes("Update Subscriptions"))
+    return res.redirect("/?status=no-permission");
 
-//   const { id } = req.params;
-//   const { body: member } = req;
+  const { id } = req.params;
+  const { body: member } = req;
 
-//   try {
-//     await membersBL.update(id, member);
+  try {
+    await membersBL.update(id, member);
 
-//     res.redirect("/members?status=updated");
-//   } catch (error) {
-//     res.render("error", { message: error.message, error });
-//   }
-// });
+    res.redirect("/members?status=updated");
+  } catch (error) {
+    res.render("error", { message: error.message, error });
+  }
+});
 
 // DELETE a specific member:
 router.delete("/:id", async (req, res, next) => {

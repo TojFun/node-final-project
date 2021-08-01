@@ -11,7 +11,8 @@ router.get("/", function (req, res, next) {
 router.post("/", async (req, res, next) => {
   const user = await usersBL.getUser(req.body);
 
-  if (user === null) return res.redirect("/login");
+  if (user == null)
+    return res.redirect("/login?status=wrong-username-or-password");
 
   req.session.user = user;
 

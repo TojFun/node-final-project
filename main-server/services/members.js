@@ -28,17 +28,9 @@ const getAllMembers = async () => {
   });
 };
 
-function createMember(member) {
-  // member.genres = member.genres.split(/[ ,]+/);
+const createMember = (member) => membersWS.post(member);
 
-  return membersWS.post(member);
-}
-
-function updateMember(id, member) {
-  // member.genres = member.genres.split(/[ ,]+/);
-
-  return membersWS.put(id, member);
-}
+const updateMember = (id, member) => membersWS.put(id, member);
 
 const deleteMember = async (memberID) => {
   const subscriptionID = (await subscriptionsWS.get()).find(
