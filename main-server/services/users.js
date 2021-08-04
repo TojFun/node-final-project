@@ -17,14 +17,14 @@ let permissionsAvailable;
 
 /* Functions: */
 
+function login({ username, password }) {
+  if (!(password && username) || password === placeHolderPassword) return null;
+
+  return getUser({ username, password });
+}
+
 // Main Functions:
 async function getUser(condition) {
-  if (
-    !((condition.password && condition.username) || condition._id) ||
-    condition.password === placeHolderPassword
-  )
-    return null;
-
   const users = await usersDB.get(condition);
 
   if (users.length < 1) return null;
@@ -182,4 +182,5 @@ module.exports = {
   deleteUser,
   getPermissions,
   createPassword,
+  login,
 };
