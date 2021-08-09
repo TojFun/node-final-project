@@ -20,3 +20,6 @@ This is my final node.js project.
   - In the subscriptions db, create 3 collections: subscriptions, movies, and members.
 
 - Uncomment the setup function at /subscriptions-ws/app.js
+
+- Create a .env file with one line in it:
+  > EXPRESS_SESSION_SECRET={ a random string}
