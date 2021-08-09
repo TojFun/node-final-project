@@ -1,27 +1,14 @@
 const usersDB = require("../models/usersDB");
+const permissionsBL = require("./permissions");
 
 const {
   users: usersJSON,
   permissions: permissionsJSON,
-  permissionsAvailable: permissionsAvailableJSON,
 } = require("../models/jsonInterfaces");
 
 const placeHolderPassword = "no-password-has-been-provided";
 
-// get all permissions available:
-let permissionsAvailable;
-
-(async () => {
-  permissionsAvailable = (await permissionsAvailableJSON.get()).permissions;
-})();
-
 /* Functions: */
-
-function login({ username, password }) {
-  if (!(password && username) || password === placeHolderPassword) return null;
-
-  return getUser({ username, password });
-}
 
 // Main Functions:
 async function getUser(condition) {
@@ -53,22 +40,11 @@ async function getAllUsers() {
   return allUsers;
 }
 
-async function getPermissions({ permissions: userPermissions }) {
-  const permissions = permissionsAvailable.map((permission) => {
-    return {
-      ...permission,
-      on: userPermissions.includes(permission.permission),
-    };
-  });
-
-  return permissions;
-}
-
 async function updateUser(id, newUser) {
   const { firstName, lastName, username, sessionTimeOut } = newUser;
 
   const jsonUser = { firstName, lastName, sessionTimeOut };
-  const permissions = getNewUserPermissions(newUser);
+  const permissions = permissionsBL.newUser(newUser);
 
   await updateJSONUsers(id, usersJSON, (user) => Object.assign(user, jsonUser));
   await updateJSONUsers(id, permissionsJSON, (user) => {
@@ -84,7 +60,7 @@ async function createUser(newUser) {
   if ((await usersDB.get({ username })).length > 0)
     return { status: "username-taken", ok: false };
 
-  const permissions = getNewUserPermissions(newUser);
+  const permissions = permissionsBL.newUser(newUser);
 
   const { id } = await usersDB.post({
     username,
@@ -111,23 +87,39 @@ async function deleteUser(id) {
   await deleteJSONUser(id, permissionsJSON);
 }
 
+async function createPassword({ username, password }) {
+  if (password === placeHolderPassword)
+    return { ok: false, status: "cant-have-password" };
+
+  const users = await usersDB.get({ username });
+
+  if (users.length < 1) return { ok: false, status: "could-not-find-user" };
+
+  const [{ _id, password: currentPassword }] = users;
+
+  if (currentPassword !== placeHolderPassword)
+    return { ok: false, status: "user-already-have-password" };
+
+  await usersDB.put(_id, () => {
+    return { password };
+  });
+
+  return { ok: true, status: "noted" };
+}
+
+function login({ username, password }) {
+  if (!(password && username) || password === placeHolderPassword) return null;
+
+  return getUser({ username, password });
+}
+
 // Utils Functions:
 async function getUserData(id, jsonfile) {
   const { users } = await jsonfile.get();
   return users.find((user) => user.id === id.toString());
 }
 
-function getNewUserPermissions(newUser) {
-  const permissions = [];
-
-  permissionsAvailable.forEach((permission) => {
-    if (newUser[permission.camelCase] === "on")
-      permissions.push(permission.permission);
-  });
-
-  return permissions;
-}
-
+// JSON Functions:
 async function updateJSONUsers(id, jsonfile, whatToDo) {
   await jsonfile.update(({ users }) => {
     const index = users.findIndex((user) => user.id === id);
@@ -156,31 +148,12 @@ async function deleteJSONUser(id, jsonfile) {
   });
 }
 
-async function createPassword({ username, password }) {
-  if (password === placeHolderPassword)
-    return { ok: false, status: "cant-have-password" };
-
-  const users = await usersDB.get({ username });
-
-  if (users.length < 1) return { ok: false, status: "could-not-find-user" };
-
-  const [{ _id, password: currentPassword }] = users;
-
-  if (currentPassword !== placeHolderPassword)
-    return { ok: false, status: "user-already-have-password" };
-
-  await usersDB.put(_id, () => password);
-
-  return { ok: true, status: "noted" };
-}
-
 module.exports = {
-  getUser,
-  getAllUsers,
-  updateUser,
-  createUser,
-  deleteUser,
-  getPermissions,
+  get: getUser,
+  getAll: getAllUsers,
+  update: updateUser,
+  create: createUser,
+  delete: deleteUser,
   createPassword,
   login,
 };

@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 const usersBL = require("../services/users");
+const permissionsBL = require("../services/permissions");
 
 router.use((req, res, next) => {
   if (req.session.user.role !== "admin") return res.redirect("/");
@@ -12,7 +13,7 @@ router.use((req, res, next) => {
 router.get("/", async function (req, res, next) {
   const { status } = req.query;
 
-  const users = await usersBL.getAllUsers();
+  const users = await usersBL.getAll();
 
   res.render("users", { users, status, name: req.session.user.firstName });
 });
@@ -27,7 +28,7 @@ router.get("/:id", async (req, res, next) => {
   const { user: currentUser } = req.session;
 
   const user =
-    id === currentUser.id ? currentUser : await usersBL.getUser({ _id: id });
+    id === currentUser.id ? currentUser : await usersBL.get({ _id: id });
 
   if (user == null)
     return res.render("error", {
@@ -35,7 +36,7 @@ router.get("/:id", async (req, res, next) => {
       error: {},
     });
 
-  const permissions = await usersBL.getPermissions(user);
+  const permissions = await permissionsBL.get(user);
 
   res.render("user", {
     title: `Update ${user.username}`,
@@ -52,7 +53,7 @@ router.post("/:id", async (req, res, next) => {
   const { body: user } = req;
 
   try {
-    await usersBL.updateUser(id, user);
+    await usersBL.update(id, user);
 
     res.redirect("/users?status=updated");
   } catch (error) {
@@ -63,7 +64,7 @@ router.post("/:id", async (req, res, next) => {
 // DELETE a specific user:
 router.delete("/:id", async (req, res, next) => {
   try {
-    usersBL.deleteUser(req.params.id);
+    usersBL.delete(req.params.id);
 
     return res.status(200).json({ ok: true, error: null });
   } catch (error) {
