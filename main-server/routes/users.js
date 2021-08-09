@@ -16,7 +16,7 @@ router.get("/", async function (req, res, next) {
 
   const users = await usersBL.getAll();
 
-  res.render("users", { users, status, name: req.session.user.firstName });
+  res.render("users", { users, status, user: req.session.user });
 });
 
 /* Update User */
@@ -28,21 +28,21 @@ router.get("/:id", async (req, res, next) => {
 
   const { user: currentUser } = req.session;
 
-  const user =
+  const selectedUser =
     id === currentUser.id ? currentUser : await usersBL.get({ _id: id });
 
-  if (user == null)
+  if (selectedUser == null)
     return res.render("error", {
       message: `Couldn't find the user with the id of ${id}`,
       error: {},
     });
 
-  const permissions = await permissionsBL.get(user);
+  const permissions = permissionsBL.get(selectedUser);
 
   res.render("user", {
-    title: `Update ${user.username}`,
-    name: currentUser.firstName,
-    user,
+    title: `Update ${selectedUser.username}`,
+    user: currentUser,
+    selectedUser,
     permissions,
     error,
   });
@@ -54,7 +54,9 @@ router.post("/:id", async (req, res, next) => {
   const { body: user } = req;
 
   try {
-    await usersBL.update(id, user);
+    console.log(await usersBL.update(id, user));
+
+    if (req.session.user.id === id) req.session.user = user;
 
     res.redirect("/users?status=updated");
   } catch (error) {

@@ -16,7 +16,7 @@ router.get("/", async (req, res, next) => {
 
   res.render("movie", {
     title: "Add Movie",
-    name: req.session.user.firstName,
+    user: req.session.user,
     movie: { _id: "add", premiered: "" },
     error,
   });

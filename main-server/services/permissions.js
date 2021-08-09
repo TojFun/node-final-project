@@ -18,16 +18,13 @@ const permissionsAvailable = [
   { camelCase: "deleteMovies", permission: "Delete Movies" },
 ];
 
-async function getPermissions({ permissions: userPermissions }) {
-  const permissions = permissionsAvailable.map((permission) => {
+const getPermissions = ({ permissions: userPermissions }) =>
+  permissionsAvailable.map((permission) => {
     return {
       ...permission,
       on: userPermissions.includes(permission.permission),
     };
   });
-
-  return permissions;
-}
 
 function getNewUserPermissions(newUser) {
   const permissions = [];

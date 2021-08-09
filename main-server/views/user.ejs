@@ -49,7 +49,7 @@
               <li class="nav-item">
                 <a class="nav-link" aria-current="page" href="/">Menu</a>
               </li>
-
+              <% if (user.permissions.includes("View Movies")) { %>
               <li class="nav-item dropdown">
                 <a
                   class="nav-link dropdown-toggle"
@@ -69,12 +69,15 @@
                   <li>
                     <a class="dropdown-item" href="/movies"> All Movies </a>
                   </li>
+                  <% if (user.permissions.includes("Create Movies")) { %>
                   <li>
                     <a class="dropdown-item" href="/movies/add">Add Movie</a>
                   </li>
+                  <% } %>
                 </ul>
               </li>
 
+              <% } if (user.permissions.includes("View Subscriptions")) { %>
               <li class="nav-item dropdown">
                 <a
                   class="nav-link dropdown-toggle"
@@ -94,11 +97,14 @@
                   <li>
                     <a class="dropdown-item" href="/members">All Members</a>
                   </li>
+                  <% if (user.permissions.includes("Create Subscriptions")) { %>
                   <li>
                     <a class="dropdown-item" href="/members/add">Add Member</a>
                   </li>
+                  <% } %>
                 </ul>
               </li>
+              <% } %>
 
               <li class="nav-item dropdown">
                 <a
@@ -139,12 +145,7 @@
               </li>
 
               <li class="nav-item">
-                <a
-                  class="nav-link"
-                  href="/logout"
-                  onclick="confirm(`Are you sure you want to log out?`)"
-                  >Logout</a
-                >
+                <a class="nav-link" href="/logout">Logout</a>
               </li>
             </ul>
           </div>
@@ -153,7 +154,7 @@
 
       <div class="container-fluid">
         <div class="text-light col-md-3">
-          Hi, <strong> <%= name %> </strong>
+          Hi, <strong><%= user.firstName %></strong>
         </div>
       </div>
 
@@ -169,7 +170,11 @@
         </div>
 
         <div class="row users">
-          <form action="/users/<%= user.id %>" method="POST" class="user">
+          <form
+            action="/users/<%= selectedUser.id %>"
+            method="POST"
+            class="user"
+          >
             <div class="container">
               <div class="row firstName mb-1">
                 <label class="col-xl-2 col-lg-3 col-md-4" for="firstName">
@@ -180,7 +185,7 @@
                   name="firstName"
                   id="firstName"
                   class="col-xl-10 col-lg-9 col-md-8"
-                  value="<%= user.firstName %>"
+                  value="<%= selectedUser.firstName %>"
                   required
                 />
               </div>
@@ -194,7 +199,7 @@
                   name="lastName"
                   id="lastName"
                   class="col-xl-10 col-lg-9 col-md-8"
-                  value="<%= user.lastName %>"
+                  value="<%= selectedUser.lastName %>"
                   required
                 />
               </div>
@@ -208,7 +213,7 @@
                   name="username"
                   id="username"
                   class="col-xl-10 col-lg-9 col-md-8"
-                  value="<%= user.username %>"
+                  value="<%= selectedUser.username %>"
                   required
                 />
               </div>
@@ -223,7 +228,7 @@
                   name="sessionTimeOut"
                   id="sessionTimeOut"
                   class="col-xl-8 col-lg-7 col-md-6"
-                  value="<%= user.sessionTimeOut %>"
+                  value="<%= selectedUser.sessionTimeOut %>"
                   required
                 />
               </div>
@@ -238,7 +243,7 @@
                   id="creation-date"
                   class="font-monospace col-xl-10 col-lg-9 col-md-8"
                 >
-                  <big><%= user.creationDate %></big>
+                  <big><%= selectedUser.creationDate %></big>
                 </span>
               </div>
               <% } %>

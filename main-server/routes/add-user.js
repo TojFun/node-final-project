@@ -13,12 +13,14 @@ router.use((req, res, next) =>
 // GET the "add user" page:
 router.get("/", async (req, res, next) => {
   const { error } = req.query;
-  const permissions = await permissionsBL.get({ permissions: [] });
+  const permissions = permissionsBL.get({ permissions: [] });
+
+  console.log(req.session.user);
 
   res.render("user", {
     title: "Add User",
-    name: req.session.user.firstName,
-    user: { id: "add" },
+    user: req.session.user,
+    selectedUser: { id: "add" },
     permissions,
     error,
   });

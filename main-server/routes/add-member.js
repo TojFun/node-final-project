@@ -3,12 +3,11 @@ const router = express.Router();
 
 const membersBL = require("../services/members");
 
-router.use((req, res, next) => {
-  if (!req.session.user.permissions.includes("Create Subscriptions"))
-    return res.redirect("/?status=no-permission");
-
-  next();
-});
+router.use((req, res, next) =>
+  !req.session.user.permissions.includes("Create Subscriptions")
+    ? res.redirect("/?status=no-permission")
+    : next()
+);
 
 // GET the "add member" page:
 router.get("/", async (req, res, next) => {
@@ -16,7 +15,7 @@ router.get("/", async (req, res, next) => {
 
   res.render("member", {
     title: "Add Member",
-    name: req.session.user.firstName,
+    user: req.session.user,
     member: { _id: "add" },
     error,
   });

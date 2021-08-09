@@ -51,7 +51,7 @@
               <li class="nav-item">
                 <a class="nav-link" aria-current="page" href="/">Menu</a>
               </li>
-
+              <% if (user.permissions.includes("View Movies")) { %>
               <li class="nav-item dropdown">
                 <a
                   class="nav-link dropdown-toggle"
@@ -71,11 +71,14 @@
                   <li>
                     <a class="dropdown-item" href="/movies"> All Movies </a>
                   </li>
+                  <% if (user.permissions.includes("Create Movies")) { %>
                   <li>
                     <a class="dropdown-item" href="/movies/add">Add Movie</a>
                   </li>
+                  <% } %>
                 </ul>
               </li>
+              <% } %>
 
               <li class="nav-item dropdown">
                 <a
@@ -98,12 +101,14 @@
                       All Members
                     </a>
                   </li>
+                  <% if (user.permissions.includes("Create Subscriptions")) { %>
                   <li>
                     <a class="dropdown-item" href="/members/add">Add Member</a>
                   </li>
+                  <% } %>
                 </ul>
               </li>
-
+              <% if (user.role === 'admin') { %>
               <li class="nav-item dropdown">
                 <a
                   class="nav-link dropdown-toggle"
@@ -128,14 +133,10 @@
                   </li>
                 </ul>
               </li>
+              <% } %>
 
               <li class="nav-item">
-                <a
-                  class="nav-link"
-                  href="/logout"
-                  onclick="confirm(`Are you sure you want to log out?`)"
-                  >Logout</a
-                >
+                <a class="nav-link" href="/logout">Logout</a>
               </li>
             </ul>
           </div>
@@ -143,7 +144,9 @@
       </nav>
 
       <div class="container-fluid">
-        <div class="text-light col-md-3">Hi, <strong><%= name %></strong></div>
+        <div class="text-light col-md-3">
+          Hi, <strong><%= user.firstName %></strong>
+        </div>
       </div>
 
       <div class="center">
@@ -174,12 +177,14 @@
               <div class="row mb-2 city">City: <%= member.city %></div>
 
               <div class="row mb-2 btns">
+                <% if (user.permissions.includes("Update Subscriptions")) { %>
                 <span class="col">
                   <a class="btn btn-primary" href="members/<%=member._id%>">
                     Edit
                   </a>
                 </span>
 
+                <% } if (user.permissions.includes("Delete Subscriptions")) { %>
                 <span class="col">
                   <a
                     class="btn btn-primary"
@@ -189,11 +194,13 @@
                     Delete
                   </a>
                 </span>
+                <% } %>
               </div>
 
               <div class="mb-1 subscriptions">
                 <div class="row">Movie Watched:</div>
 
+                <% if (user.permissions.includes("Update Subscriptions")) { %>
                 <div class="center">
                   <button
                     class="btn btn-secondary"
@@ -241,13 +248,14 @@
                     </div>
                   </div>
                 </div>
+                <% } %>
 
                 <ul>
                   <% member?.subscriptions?.movies.forEach(movie => { %>
                   <li>
-                    <a href="/movies?search=<%= movie.name %>"
-                      ><%= movie.name %></a
-                    >
+                    <a href="/movies?search=<%= movie.name %>">
+                      <%= movie.name %>
+                    </a>
                     , <%= new Date(movie.watchDate).toJSON().slice(0,10) %>
                   </li>
                   <% }) %>

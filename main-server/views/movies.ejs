@@ -71,12 +71,14 @@
                       All Movies
                     </a>
                   </li>
+                  <% if (user.permissions.includes("Create Movies")) { %>
                   <li>
                     <a class="dropdown-item" href="/movies/add">Add Movie</a>
                   </li>
+                  <% } %>
                 </ul>
               </li>
-
+              <% if (user.permissions.includes("View Subscriptions")) { %>
               <li class="nav-item dropdown">
                 <a
                   class="nav-link dropdown-toggle"
@@ -96,12 +98,15 @@
                   <li>
                     <a class="dropdown-item" href="/members">All Members</a>
                   </li>
+                  <% if (user.permissions.includes("Create Subscriptions")) { %>
                   <li>
                     <a class="dropdown-item" href="/members/add">Add Member</a>
                   </li>
+                  <% } %>
                 </ul>
               </li>
 
+              <% } if (user.role === 'admin') { %>
               <li class="nav-item dropdown">
                 <a
                   class="nav-link dropdown-toggle"
@@ -126,14 +131,10 @@
                   </li>
                 </ul>
               </li>
+              <% } %>
 
               <li class="nav-item">
-                <a
-                  class="nav-link"
-                  href="/logout"
-                  onclick="confirm(`Are you sure you want to log out?`)"
-                  >Logout</a
-                >
+                <a class="nav-link" href="/logout"> Logout </a>
               </li>
             </ul>
           </div>
@@ -141,7 +142,9 @@
       </nav>
 
       <div class="container-fluid">
-        <div class="text-light col-md-3">Hi, <strong><%= name %></strong></div>
+        <div class="text-light col-md-3">
+          Hi, <strong><%= user.firstName %></strong>
+        </div>
       </div>
 
       <div class="center">
@@ -223,10 +226,11 @@
             <% } %>
 
             <div class="btns">
+              <% if (user.permissions.includes("Update Movies")) { %>
               <span>
                 <a class="btn btn-primary" href="movies/<%=movie._id%>">Edit</a>
               </span>
-
+              <% } if (user.permissions.includes("Delete Movies")) { %>
               <span>
                 <a
                   class="btn btn-primary"
@@ -236,6 +240,7 @@
                   Delete
                 </a>
               </span>
+              <% } %>
             </div>
           </div>
           <% }) %>

@@ -1,12 +1,1 @@
-{
-  "users": [
-    {
-      "id": "60da3477f688cc28efe0de45",
-      "firstName": "admin",
-      "lastName": "admin",
-      "creationDate": "2005-09-08",
-      "sessionTimeOut": "999999999",
-      "role": "admin"
-    }
-  ]
-}
+{"users":[{"id":"60da3477f688cc28efe0de45","firstName":"admin","lastName":"admin","creationDate":"2005-09-08","sessionTimeOut":"999999999","role":"admin"},{"id":"611162c93b0aba6f8c6e4152","firstName":"kami","lastName":"arad","sessionTimeOut":"5","creationDate":"2021-08-09","role":"user"}]}

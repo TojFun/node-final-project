@@ -13,7 +13,7 @@ router.get("/", async function (req, res, next) {
   try {
     const members = await membersBL.getAll(search);
 
-    res.render("members", { members, name: req.session.user.firstName });
+    res.render("members", { members, user: req.session.user });
   } catch (error) {
     res.render("error", { message: "Couldn't connect to the REST API", error });
   }
@@ -35,7 +35,7 @@ router.get("/:id", async (req, res, next) => {
 
     res.render("member", {
       title: `Update ${member.name}`,
-      name: req.session.user.firstName,
+      user: req.session.user,
       member,
     });
   } catch (error) {

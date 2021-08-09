@@ -5,7 +5,7 @@ const router = express.Router();
 router.get("/", function (req, res, next) {
   const { status } = req.query;
 
-  res.render("index", { name: req.session.user.firstName, status });
+  res.render("index", { user: req.session.user, status });
 });
 
 module.exports = router;

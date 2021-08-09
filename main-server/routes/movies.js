@@ -13,9 +13,9 @@ router.get("/", async function (req, res, next) {
   try {
     const movies = await moviesBL.getAll(search);
 
-    res.render("movies", { movies, search, name: req.session.user.firstName });
+    res.render("movies", { movies, search, user: req.session.user });
   } catch (error) {
-    res.render("error", { message: "Couldn't connect to ws", error });
+    res.render("error", { message: "Couldn't connect to the REST API", error });
   }
 });
 
@@ -35,7 +35,7 @@ router.get("/:id", async (req, res, next) => {
 
     res.render("movie", {
       title: `Update ${movie.name}`,
-      name: req.session.user.firstName,
+      user: req.session.user,
       movie,
     });
   } catch (error) {
