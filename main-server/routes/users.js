@@ -4,10 +4,11 @@ const router = express.Router();
 const usersBL = require("../services/users");
 const permissionsBL = require("../services/permissions");
 
-router.use((req, res, next) => {
-  if (req.session.user.role !== "admin") return res.redirect("/");
-  next();
-});
+router.use((req, res, next) =>
+  req.session.user.role !== "admin"
+    ? res.redirect("/status=no-permission")
+    : next()
+);
 
 // GET users management page:
 router.get("/", async function (req, res, next) {
