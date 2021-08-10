@@ -6,7 +6,7 @@ const permissionsBL = require("../services/permissions");
 
 router.use((req, res, next) =>
   req.session.user.role !== "admin"
-    ? res.redirect("/status=no-permission")
+    ? res.redirect("/?status=no-permission")
     : next()
 );
 
@@ -20,7 +20,7 @@ router.get("/", async (req, res, next) => {
   res.render("user", {
     title: "Add User",
     user: req.session.user,
-    selectedUser: { id: "add" },
+    selectedUser: { id: "add", sessionTimeOut: "" },
     permissions,
     error,
   });
