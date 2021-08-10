@@ -32,8 +32,8 @@ async function getAllUsers() {
   const allUsers = dbUsers.map((dbUser) => {
     return Object.assign(
       dbUser,
-      users.find((user) => user.id == dbUser._id),
-      permissions.find((permission) => permission.id == dbUser._id)
+      users.find((user) => user.id === dbUser._id.toString()),
+      permissions.find((permission) => permission.id === dbUser._id.toString())
     );
   });
 
@@ -41,26 +41,28 @@ async function getAllUsers() {
 }
 
 async function updateUser(id, newUser) {
-  const { firstName, lastName, username, sessionTimeOut } = newUser;
+  const { firstName, lastName, username, sessionTimeOut, permissions } =
+    newUser;
 
-  const jsonUser = { firstName, lastName, sessionTimeOut };
-  const permissions = permissionsBL.newUser(newUser);
+  await updateJSONUsers(id, usersJSON, (user) => {
+    return { ...user, firstName, lastName, sessionTimeOut };
+  });
 
-  await updateJSONUsers(id, usersJSON, (user) => Object.assign(user, jsonUser));
   await updateJSONUsers(id, permissionsJSON, (user) => {
     return { id, permissions };
   });
 
-  await usersDB.put(id, (data) => Object.assign(data, { username }));
+  await usersDB.put(id, (data) => {
+    return { ...data, username };
+  });
 }
 
 async function createUser(newUser) {
-  const { firstName, lastName, username, sessionTimeOut } = newUser;
+  const { firstName, lastName, username, sessionTimeOut, permissions } =
+    formatUser(newUser);
 
   if ((await usersDB.get({ username })).length > 0)
     return { status: "username-taken", ok: false };
-
-  const permissions = permissionsBL.newUser(newUser);
 
   const { id } = await usersDB.post({
     username,
@@ -119,6 +121,19 @@ async function getUserData(id, jsonfile) {
   return users.find((user) => user.id === id.toString());
 }
 
+function formatUser(user) {
+  const { firstName, lastName, username, sessionTimeOut, isInfinity } = user;
+  const permissions = permissionsBL.newUser(user);
+
+  return {
+    firstName,
+    lastName,
+    username,
+    sessionTimeOut: isInfinity === "on" ? "Infinity" : sessionTimeOut,
+    permissions,
+  };
+}
+
 // JSON Functions:
 async function updateJSONUsers(id, jsonfile, whatToDo) {
   await jsonfile.update(({ users }) => {
@@ -154,6 +169,7 @@ module.exports = {
   update: updateUser,
   create: createUser,
   delete: deleteUser,
+  formatUser,
   createPassword,
   login,
 };

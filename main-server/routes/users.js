@@ -3,16 +3,18 @@ const router = express.Router();
 
 const usersBL = require("../services/users");
 const permissionsBL = require("../services/permissions");
+const { titleCase } = require("../../models/utils");
 
 router.use((req, res, next) =>
   req.session.user.role !== "admin"
-    ? res.redirect("/status=no-permission")
+    ? res.redirect("/?status=no-permission")
     : next()
 );
 
 // GET users management page:
 router.get("/", async function (req, res, next) {
-  const { status } = req.query;
+  const status =
+    req.query.status != null ? titleCase(req.query.status) + "." : null;
 
   const users = await usersBL.getAll();
 
@@ -51,12 +53,13 @@ router.get("/:id", async (req, res, next) => {
 // POST specific user's info to the server:
 router.post("/:id", async (req, res, next) => {
   const { id } = req.params;
-  const { body: user } = req;
+  const user = usersBL.formatUser(req.body);
 
   try {
-    console.log(await usersBL.update(id, user));
+    await usersBL.update(id, user);
 
-    if (req.session.user.id === id) req.session.user = user;
+    if (req.session.user.id === id)
+      req.session.user = { id, ...user, role: req.session.user.role };
 
     res.redirect("/users?status=updated");
   } catch (error) {

@@ -151,12 +151,17 @@
       <div class="center" style="margin-top: 2vh">
         <h1>Movies - Subscriptions Web Site</h1>
       </div>
-
+      
+      <% if (status != null) { %>
       <div class="status-panel center" style="margin-top: 10vh">
-        <% if (status === "no-permission") { %>
+        <% if (status.toLowerCase() === "no permission") { %>
         <h2>Sorry, you don't have the permission of doing that.</h2>
+
+        <% } else { %>
+        <h3 class="status"><%= status %></h3>
         <% } %>
       </div>
+      <% } %>
     </main>
   </body>
 </html>
