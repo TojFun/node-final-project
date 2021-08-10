@@ -13,7 +13,7 @@ app.use(express.urlencoded({ extended: false }));
 
 // !! Uncomment me !!
 // Setting up the DB:
-// setup();
+setup();
 
 require("./configs/dataBase");
 

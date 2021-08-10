@@ -192,10 +192,10 @@
 
         <div class="row movies">
           <% movies.forEach(movie => { %>
-          <div class="movie col-6 col-lg-4 col-xl-3 col-xxl-2 border">
+          <div class="movie col-6 col-lg-4 col-xl-3 border">
             <div class="name">
               Name: <%= `${movie.name}, ${(new
-              Date(movie.premiered)).getFullYear()}` %>
+              Date(movie.premiered)).getFullYear()}` %>.
             </div>
 
             <div class="genres">Genres: <%= movie.genres.join(", ") %>.</div>
