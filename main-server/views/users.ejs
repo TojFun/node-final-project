@@ -164,26 +164,26 @@
         </div>
 
         <div class="row users">
-          <% users.forEach(user => { %>
+          <% users.forEach(currentUser => { %>
           <div class="user col-6 border">
             <div class="name">
-              Name: <%= user.firstName + " " + user.lastName%>
+              Name: <%= currentUser.firstName + " " + currentUser.lastName%>
             </div>
 
-            <div class="username">Username: <%= user.username %></div>
+            <div class="username">Username: <%= currentUser.username %></div>
 
             <div class="session-time-out">
-              Session Time Out (Minutes): <%= user.sessionTimeOut %>
+              Session Time Out (Minutes): <%= currentUser.sessionTimeOut %>
             </div>
 
             <div class="creation-date">
-              Creation Date: <%= user.creationDate %>
+              Creation Date: <%= currentUser.creationDate %>
             </div>
 
             <div class="permissions">
               Permissions:
               <ul>
-                <% user.permissions.forEach(permission => { %>
+                <% currentUser.permissions.forEach(permission => { %>
                 <li><%= permission %></li>
                 <% }) %>
               </ul>
@@ -191,15 +191,17 @@
 
             <div class="btns">
               <span>
-                <a class="btn btn-primary" href="users/<%=user.id%>">Edit</a>
+                <a class="btn btn-primary" href="users/<%=currentUser.id%>"
+                  >Edit</a
+                >
               </span>
 
-              <% if (user.role !== "admin") { %>
+              <% if (currentUser.role !== "admin") { %>
               <span>
                 <a
                   class="btn btn-primary"
                   href=""
-                  onclick="deleteThing('<%=user.id%>', 'user')"
+                  onclick="deleteThing('<%=currentUser.id%>', 'user')"
                 >
                   Delete
                 </a>

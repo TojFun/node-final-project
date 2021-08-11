@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
 
+const { titleCase } = require("../../models/utils");
+
 /* GET home page. */
 router.get("/", function (req, res, next) {
   const status =

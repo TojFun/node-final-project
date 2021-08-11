@@ -1,8 +1,9 @@
 const express = require("express");
-const { titleCase } = require("../../models/utils");
 const router = express.Router();
 
 const usersBL = require("../services/users");
+
+const { titleCase } = require("../../models/utils");
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
